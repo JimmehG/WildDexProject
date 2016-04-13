@@ -25,6 +25,7 @@ class Animal(models.Model):
 class OfficeVolunteer(models.Model):
     first_name = models.CharField(max_length=64)
     last_name = models.CharField(max_length=64)
+    email_address = models.EmailField()
     phone_number = PhoneNumberField()
 
 
@@ -38,3 +39,5 @@ class Carer(models.Model):
 class BranchManager(models.Model):
     first_name = models.CharField(max_length=64)
     last_name = models.CharField(max_length=64)
+    email_address = models.EmailField()
+    phone_number = PhoneNumberField()
