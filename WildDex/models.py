@@ -19,6 +19,7 @@ class Animal(models.Model):
         ('F', 'Female'),
     )
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
+    current_carer = Carer()
     # prev_owners = needs array of previous owners
 
 
