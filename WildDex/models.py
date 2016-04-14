@@ -4,7 +4,7 @@ from address.models import AddressField
 
 
 # Create your models here.
-# ID CREATED AUTOMATICALLY.
+# ID CREATED AUTOMATICALLY. as id = models.AutoField(primary_key=True)
 
 class Animal(models.Model):
     SPECIES_CHOICES = (
@@ -13,7 +13,7 @@ class Animal(models.Model):
     )
     species = models.CharField(max_length=64, choices=SPECIES_CHOICES)
     caller = models.ForeignKey(Caller,
-                               on_delete=models.SET_NULL(),
+                               on_delete=models.SET_NULL,
                                null=True, )
     GENDER_CHOICES = (
         ('M', 'Male'),
@@ -21,7 +21,7 @@ class Animal(models.Model):
     )
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
     current_carer = models.ForeignKey(Carer,
-                                      on_delete=models.SET_NULL(),
+                                      on_delete=models.SET_NULL,
                                       null=True, )
     prev_carers = models.ManyToManyField(Carer)
 
