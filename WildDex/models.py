@@ -12,7 +12,7 @@ class Animal(models.Model):
         # add species in here
     )
     species = models.CharField(max_length=64, choices=SPECIES_CHOICES)
-    caller = models.ForeignKey(Caller,
+    caller = models.ForeignKey('Caller',
                                on_delete=models.SET_NULL,
                                null=True, )
     GENDER_CHOICES = (
@@ -20,10 +20,7 @@ class Animal(models.Model):
         ('F', 'Female'),
     )
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
-    current_carer = models.ForeignKey(Carer,
-                                      on_delete=models.SET_NULL,
-                                      null=True, )
-    prev_carers = models.ManyToManyField(Carer)
+    prev_carers = models.ManyToManyField('Carer')
 
 
 class Caller(models.Model):
@@ -51,7 +48,7 @@ class OfficeVolunteer(User):
 
 class Carer(User):
     address = AddressField()
-    animals = models.ManyToManyField(Animal)
+    animals = models.ManyToManyField('Animal')
 
 
 class BranchManager(User):
