@@ -1,6 +1,8 @@
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
-from address.models import AddressField
+
+
+# from address.models import AddressField CHANGE ADDRESS TO LOCALFLAVOR AND CHARFIELDS
 
 
 # Create your models here.
@@ -27,11 +29,11 @@ class Caller(models.Model):
     first_name = models.CharField(max_length=64)
     last_name = models.CharField(max_length=64)
     phone_number = PhoneNumberField()
-    address = AddressField()
+    # address = AddressField()
 
 
 class Branch(models.Model):
-    address = AddressField()
+    # address = AddressField()
     phone_number = PhoneNumberField()
 
 
@@ -47,7 +49,7 @@ class OfficeVolunteer(User):
 
 
 class Carer(User):
-    address = AddressField()
+    # address = AddressField()
     animals = models.ManyToManyField('Animal')
 
 
