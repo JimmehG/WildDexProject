@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'WildDex',
-    'address',
+    # 'address', # no longer needed in place of localflavor
     'localflavor',
 ]
 

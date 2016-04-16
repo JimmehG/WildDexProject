@@ -1,6 +1,5 @@
 from django import forms
 from localflavor.au.forms import AUPhoneNumberField, AUPostCodeField
-from django import newform as forms
 from address.forms import AddressField
 
 
