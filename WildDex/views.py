@@ -9,8 +9,12 @@ from .forms import PersonForm
 # def index(request):
 #    return HttpResponse("Hello world!")
 
-
 def index(request):
+    #return HttpResponse("about")
+    return render(request, 'home.html', {})
+
+
+def add_person(request):
     # if this is a POST request we need to process the form data
     if request.method == 'POST':
      # create a form instance and populate it with data from the request:
