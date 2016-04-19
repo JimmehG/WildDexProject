@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<table>
+    <tr>
+        <th>first_name</th>
+        <th>last_name</th>
+        <th>email_address</th>
+        <th>street_num_name</th>
+        <th>suburb</th>
+        <th>postcode</th>
+        <th>phone_number</th>
+    </tr>
+    {% for item in query %}
+        <tr>
+            <td>{{ item.first_name }}</td>
+            <td>{{ item.last_name }}</td>
+            <td>{{ item.email_address }}</td>
+            <td>{{ item.street_num_name }}</td>
+            <td>{{ item.suburb }}</td>
+            <td>{{ item.postcode }}</td>
+            <td>{{ item.phone_number }}</td>
+        </tr>
+    {% endfor %}
+</table>
+</body>
+</html>
