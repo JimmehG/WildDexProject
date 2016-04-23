@@ -8,4 +8,5 @@ urlpatterns = [
     url(r'^add_user/$', views.add_user, name='add_user'),  # www.sydneywilddex.com.au/add_user
     url(r'^submitted/$', views.submitted, name='submitted'),  # etc.
     url(r'^table/$', views.table, name='table'),
+    url(r'^register/$', views.register, name='register'),
 ]
