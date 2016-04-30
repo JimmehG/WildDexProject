@@ -3,11 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <title>HomePage</title>
+
 </head>
+
+{% if user.is_authenticated %}
+    <h1>WildDex says... hello {{ user.username }}!</h1>
+{% else %}
+    <h1>WildDex says... hello Friends!</h1>
+{% endif %}
+
 <body>
 <p><a href="/add_user/">Add User</a></p>
 <p><a href="/table/">View Database</a></p>
 <p><a href="/register/">Register</a></p>
+<p><a href="/login/">Login</a></p>
 <a href="/about/">About</a><br />
 </body>
 </html>
