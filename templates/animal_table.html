@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<table>
+    <tr>
+    </tr>
+    {% for item in query %}
+        <tr>
+            <td>{{ item.get_species_display }}</td>
+            <td>{{ item.get_gender_display }}</td>
+            <td>{{ item.caller_name }} </td>
+            <td>{{ item.caller_number }} </td>
+            <td>{{ item.street_num_name }} </td>
+            <td>{{ item.suburb }} </td>
+            <td>{{ item.postcode }}</td>
+            <td>{{ item.encounter_date }}</td>
+            <td>{{ item.encounter_location }}</td>
+            <td>{{ item.care_purpose }}</td>
+            <td>{{ item.status }}</td>
+            <td>{{ item.branch_coordinator }}</td>
+            <td>{{ item.office_volunteer }}</td>
+            <td><a href="/{{ user }}/edit_animal/{{ item.pk }}">Edit</a></td>
+        </tr>
+    {% endfor %}
+</table>
+<p><a href="/{{ user }}/">Home</a></p>
+</body>
+</html>

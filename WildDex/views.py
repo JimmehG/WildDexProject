@@ -1,9 +1,8 @@
+from django.forms import inlineformset_factory
 from django.shortcuts import render
-from django.http import HttpResponseRedirect
-from .models import User
-from .forms import UserForm,UserProfileForm
-from django.contrib.auth import authenticate, login
 from django.http import HttpResponseRedirect, HttpResponse
+from .models import UserType, Animal
+from .forms import CarerForm, UserProfileForm, AnimalForm, AnimalFormCarer
 # Create your views here.
 
 
@@ -11,24 +10,76 @@ def index(request):
     return render(request, 'index.html')
 
 
-def add_user(request):
+def login(request):
+    return render(request, 'login.html')
+
+
+def user_home(request, user):
+    return render(request, 'home_templates/' + user + '_home.html', {'user': user})
+
+
+def add_animal(request, user):
+    if request.method == 'POST':
+        form = AnimalForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('/' + user + '/animal_table/')
+    else:
+        form = AnimalForm()
+    return render(request, 'animal_form.html', {'comment_form': form, 'user': user})
+
+
+def edit_animal(request, animal_id, user):
+    animal = Animal.objects.get(pk=animal_id)
+    if request.method == 'POST':
+        if user == 'carer':
+            form = AnimalFormCarer(request.POST, instance=animal)
+        else:
+            form = AnimalForm(request.POST, instance=animal)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('/' + user + '/animal_table/')
+    else:
+        if user == 'carer':
+            form = AnimalFormCarer(instance=animal)
+        else:
+            form = AnimalForm(instance=animal)
+    return render(request, 'animal_form.html', {'comment_form': form, 'user': user})
+
+
+def add_carer(request, user):
     # if this is a POST request we need to process the form data
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
-        form = UserForm(request.POST)
+        form = CarerForm(request.POST)
         # check whether it's valid:
         if form.is_valid():
             # process the data in form.cleaned_data as required
             form.save()
 
             # redirect to a new URL:
-            return HttpResponseRedirect('/submitted/')
+            return HttpResponseRedirect('/' + user + '/table/')
 
     # if a GET (or any other method) we'll create a blank form
     else:
-        form = UserForm()
+        form = CarerForm()
 
-    return render(request, 'userform.html', {'comment_form': form})
+    return render(request, 'user_form.html', {'comment_form': form})
+
+
+'''def manage_animals(request, caller_id):
+    caller = Caller.objects.get(pk=caller_id)
+    animal_inline_formset = inlineformset_factory(Caller, Animal, fields=('species', 'gender'))
+    if request.method == "POST":
+        formset = animal_inline_formset(request.POST, request.FILES, instance=caller)
+        if formset.is_valid():
+            formset.save()
+            # Do something. Should generally end with a redirect. For example:
+            return HttpResponseRedirect(caller.get_absolute_url())
+    else:
+        formset = animal_inline_formset(instance=caller)
+    return render(request, 'manage_books.html', {'formset': formset})'''
+
 
 def register(request):
 
@@ -69,7 +120,7 @@ def register(request):
         # Print problems to the terminal.
         # They'll also be shown to the user.
         else:
-             print(user_form.errors, profile_form.errors)
+            print(user_form.errors, profile_form.errors)
 
     # Not a HTTP POST, so we render our form using two ModelForm instances.
     # These forms will be blank, ready for user input.
@@ -78,59 +129,23 @@ def register(request):
         profile_form = UserProfileForm()
 
     # Render the template depending on the context.
-    return render(request,
-            'register.html',
-            {'user_form': user_form, 'profile_form': profile_form, 'registered': registered} )
+    return render(request, 'register.html',
+                  {'user_form': user_form, 'profile_form': profile_form, 'registered': registered})
 
-
-def user_login(request):
-    # If the request is a HTTP POST, try to pull out the relevant information.
-    if request.method == 'POST':
-        # Gather the username and password provided by the user.
-        # This information is obtained from the login form.
-        # We use request.POST.get('<variable>') as opposed to request.POST['<variable>'],
-        # because the request.POST.get('<variable>') returns None, if the value does not exist,
-        # while the request.POST['<variable>'] will raise key error exception
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-
-        # Use Django's machinery to attempt to see if the username/password
-        # combination is valid - a User object is returned if it is.
-        user = authenticate(username=username, password=password)
-
-        # If we have a User object, the details are correct.
-        # If None (Python's way of representing the absence of a value), no user
-        # with matching credentials was found.
-        if user:
-            # Is the account active? It could have been disabled.
-            if user.is_active:
-                # If the account is valid and active, we can log the user in.
-                # We'll send the user back to the homepage.
-                login(request, user)
-                return HttpResponseRedirect('/index/')
-            else:
-                # An inactive account was used - no logging in!
-                return HttpResponse("Your WildDex account is disabled.")
-        else:
-            # Bad login details were provided. So we can't log the user in.
-            print("Invalid login details: {0}, {1}".format(username, password))
-            return HttpResponse("Invalid login details supplied.")
-
-    # The request is not a HTTP POST, so display the login form.
-    # This scenario would most likely be a HTTP GET.
-    else:
-        # No context variables to pass to the template system, hence the
-        # blank dictionary object...
-        return render(request, 'login.html', {})
 
 def table(request):
-    query = User.objects.all()
+    query = UserType.objects.all()
     return render(request, 'table.html', {'query': query})
+
+
+def animal_table(request, user):
+    query = Animal.objects.all()
+    return render(request, 'animal_table.html', {'query': query, 'user': user})
 
 
 def submitted(request):
     return render(request, 'submitted.html')
 
 
-def about(request):
-    return render(request, 'about.html')
+def about(request, user=None):
+    return render(request, 'about.html', {'user': user})

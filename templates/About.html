@@ -7,8 +7,13 @@
 <body>
 
 </body>
-  <h1>WildDex</h1>
-  <p>Worked for the Sydney Wildlife Group</p>
-  <p>Developed by Macquarie University </p>
-  <a href="/ /">Index</a>
+<h1>WildDex</h1>
+<p>Worked for the Sydney Wildlife Group</p>
+<p>Developed by Macquarie University </p>
+<p>
+    {% if user %}
+        <a href="/{{ user }}/">Home</a>
+    {% endif %}
+</p>
+<p><a href="/">Login Page</a></p>
 </html>
