@@ -10,62 +10,65 @@ from django.contrib.auth.models import User
 
 class Animal(models.Model):
     SPECIES_CHOICES = (
-        ('RTP', 'Ring Tail Possum'),
-        # add species in here
+        ('RTP', 'Ringtail Possum'),
+        ('RLK', 'Rainbow Lorrikeet'),
+        ('TFM', 'Tawny Frogmouth'),
+        ('BTP', 'Brushtail Possum'),
+        ('GFF', 'Grey-headded Flying Fox')
     )
-    species = models.CharField(max_length=64, choices=SPECIES_CHOICES)
-    caller = models.ForeignKey('Caller',
-                               on_delete=models.SET_NULL,
-                               null=True, )
+    species = models.CharField(max_length=64, choices=SPECIES_CHOICES, blank=True)
     GENDER_CHOICES = (
         ('M', 'Male'),
         ('F', 'Female'),
     )
-    gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
-    prev_carers = models.ManyToManyField('Carer')
+    gender = models.CharField(max_length=1, choices=GENDER_CHOICES, blank=True)
+    prev_carers = models.ManyToManyField('Carer', blank=True)
+    caller_name = models.CharField(max_length=128, blank=False, null=True)
+    caller_number = AUPhoneNumberField(blank=False, null=True)
+    street_num_name = models.CharField(max_length=256, blank=False, null=True)
+    suburb = models.CharField(max_length=64, blank=False, null=True)
+    postcode = AUPostCodeField(max_length=8, blank=True)
+    encounter_location = models.CharField(max_length=256, blank=True)
+    encounter_date = models.DateField(blank=False, null=True)
+    care_purpose = models.CharField(max_length=256, blank=True)
+    status = models.CharField(max_length=256, blank=True)
+    branch_coordinator = models.ForeignKey('BranchCoordinator', on_delete=models.SET_NULL, null=True, blank=True)
+    office_volunteer = models.ForeignKey('OfficeVolunteer', on_delete=models.SET_NULL, null=True, blank=True)
 
 
-class Caller(models.Model):
-    first_name = models.CharField(max_length=64)
-    last_name = models.CharField(max_length=64)
-    phone_number = AUPhoneNumberField()
-    # address = AddressField()
+class UserType(User):
+    phone_number = AUPhoneNumberField(blank=False, null=True)
+    street_num_name = models.CharField(max_length=256, blank=False, null=True)
+    suburb = models.CharField(max_length=64, blank=False, null=True)
+    postcode = AUPostCodeField(max_length=8, blank=False, null=True)
+    availabilities = models.CharField(max_length=128, blank=False, null=True)
 
-
-class Branch(models.Model):
-    # address = AddressField()
-    phone_number = AUPhoneNumberField()
-
-
-class UserType(models.Model):
-    # This line is required. Links UserProfile to a User model instance.
-    user = models.OneToOneField(User)
-   # User model in Django already has email, username and password attributes
-   # first_name = models.CharField(max_length=64)
-   # last_name = models.CharField(max_length=64)
-   # email_address = models.EmailField()
-    phone_number = AUPhoneNumberField(blank=True)
-    street_num_name = models.CharField(max_length=256,blank=True)
-    suburb = models.CharField(max_length=64,blank=True)
-    postcode = AUPostCodeField(max_length=8,blank=True)
-
-    # Override the __unicode__() method to return out something meaningful!
     def __unicode__(self):
-        return self.user.username
-"""def __str__(self):
-        return "{0} {1} {2} {3} {4} {5} {6} {7}".format(
-            self, self.first_name, self.last_name, self.email_address,
-            self.phone_number, self.street_num_name, self.suburb, self.postcode) """
+        return self.username
 
 
-class OfficeVolunteer(User):
-    pass
+class OfficeVolunteer(UserType):
+    office_number = AUPhoneNumberField(blank=False, null=True)
 
 
-class Carer(User):
-    # address = AddressField()
+class Carer(UserType):
     animals = models.ManyToManyField('Animal')
+    branch_coordinator = models.ForeignKey('BranchCoordinator', on_delete=models.SET_NULL, null=True)
+    specialty = models.CharField(max_length=128, blank=True)
+    facilities = models.CharField(max_length=128, blank=True)
+    vaccinations = models.CharField(max_length=128, blank=True)
 
 
-class BranchManager(User):
-    pass
+class BranchCoordinator(UserType):
+    branch = models.CharField(max_length=128, blank=True)
+    animals = models.ManyToManyField('Animal')
+    specialty = models.CharField(max_length=128, blank=True)
+    facilities = models.CharField(max_length=128, blank=True)
+    vaccinations = models.CharField(max_length=128, blank=True)
+
+
+'''class Branch(models.Model):
+    street_num_name = models.CharField(max_length=256, blank=False, null=True)
+    suburb = models.CharField(max_length=64, blank=False, null=True)
+    postcode = AUPostCodeField(max_length=8, blank=False, null=True)
+    phone_number = AUPhoneNumberField(blank=False, null=True)'''

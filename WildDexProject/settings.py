@@ -37,7 +37,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'WildDex',
-    # 'address', # no longer needed in place of localflavor
     'localflavor',
 ]
 
@@ -102,12 +101,13 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-#Store password and encryption of password
-#https://docs.djangoproject.com/en/1.9/topics/auth/passwords/#auth-password-storage
+# Store password and encryption of password
+# https://docs.djangoproject.com/en/1.9/topics/auth/passwords/#auth-password-storage
 
 PASSWORD_HASHERS = (
-'django.contrib.auth.hashers.PBKDF2PasswordHasher',
-'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
+    'django.contrib.auth.hashers.PBKDF2PasswordHasher',
+    'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
+    'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
 )
 
 # Internationalization
