@@ -3,7 +3,7 @@ from django.conf.urls import url
 from . import views
 
 urlpatterns = [
-    url(r'^$', views.login, name='login'),  # www.sydneywilddex.com.au/
+    url(r'^$|^login/', views.login_user, name='login'),  # www.sydneywilddex.com.au/
     url(r'^about/$', views.about, name='about'),  # www.sydneywilddex.com.au/about
     # url(r'^add_user/$', views.add_user, name='add_user'),  # www.sydneywilddex.com.au/add_user
     # url(r'^add_animal/$', views.add_animal, name='add_animal'),
@@ -18,5 +18,5 @@ urlpatterns = [
     url(r'^(?P<user>\w+)/edit_animal/(?P<animal_id>\d+)$', views.edit_animal, name='edit_animal'),
     url(r'^(?P<user>\w+)/animal_table/$', views.animal_table, name='animal_table'),
     url(r'^(?P<user>\w+)/about/$', views.about, name='about'),
-
+    url(r'^logout/$', views.logout_user, name='logout'),
 ]
