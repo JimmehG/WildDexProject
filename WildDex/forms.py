@@ -15,7 +15,7 @@ class CarerForm(ModelForm):
 class UserProfileForm(ModelForm):
     class Meta:
         model = UserType
-        fields = ['first_name', 'last_name', 'email', 'street_num_name', 'suburb', 'postcode', 'phone_number']
+        fields = ['first_name', 'last_name', 'street_num_name', 'suburb', 'postcode', 'phone_number']
 
 '''class UserForm(ModelForm):
     class Meta:

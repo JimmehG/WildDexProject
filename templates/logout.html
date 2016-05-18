@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>About</title>
+</head>
+<body>
+
+</body>
+<h1>WildDex Logout</h1>
+<p>Successfully logout</p>
+<p>
+    {% if user %}
+        <a href="/{{ user }}/">Home</a>
+    {% endif %}
+</p>
+<p><a href="/">Login Page</a></p>
+</html>

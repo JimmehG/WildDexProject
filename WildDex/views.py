@@ -31,7 +31,7 @@ def login_user(request):
 
 def logout_user(request):
     logout(request)
-    return HttpResponseRedirect('/login/')
+    return render(request, 'login.html')
 
 
 def user_home(request, user):
@@ -101,7 +101,7 @@ def add_carer(request, user):
     return render(request, 'manage_books.html', {'formset': formset})'''
 
 
-def register(request):
+def register(request, user):
 
     # A boolean value for telling the template whether the registration was successful.
     # Set to False initially. Code changes value to True when registration succeeds.

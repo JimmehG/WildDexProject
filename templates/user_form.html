@@ -5,13 +5,22 @@
     <meta charset="UTF-8">
     <title>Person Form</title>
 </head>
+
 <body>
-<form method="post">
+{% if registered %}
+    <strong>thank you for registering!</strong>
+    <a href="//">Return to the homepage.</a><br/>
+{% else %}
+    <strong>register here!</strong><br/>
+
+    <form method="post">login
     <table style="width:50%">
     {% csrf_token %}
-        {% include "form_snippet.html" with form=comment_form %}
+        {{ user_form.as_p }}
+        {{ profile_form.as_p }}
     </table>
     <input type="submit" value="Submit"/>
 </form>
+{% endif %}
 </body>
 </html>

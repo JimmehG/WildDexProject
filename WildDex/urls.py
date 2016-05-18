@@ -12,11 +12,11 @@ urlpatterns = [
     # url(r'^animal_table/$', views.animal_table, name='animal_table'),
     # url(r'^register/$', views.register, name='register'),
     # url(r'^edit_animal/(?P<animal_id>\d+0)/$', views.edit_animal, name='edit_animal'),
-    url(r'^(?P<user>branchm)/add_carer/$', views.add_carer, name='add_carer'),
+    url(r'^(?P<user>branchm)/add_carer/$', views.register, name='add_carer'),
     url(r'^(?P<user>\w+)/$', views.user_home, name='user_home'),
     url(r'^(?P<user>\w+)/add_animal/$', views.add_animal, name='add_animal'),
     url(r'^(?P<user>\w+)/edit_animal/(?P<animal_id>\d+)$', views.edit_animal, name='edit_animal'),
     url(r'^(?P<user>\w+)/animal_table/$', views.animal_table, name='animal_table'),
     url(r'^(?P<user>\w+)/about/$', views.about, name='about'),
-    url(r'^logout/$', views.logout_user, name='logout'),
+    url(r'^$|^login/', views.logout_user, name='logout'),
 ]
