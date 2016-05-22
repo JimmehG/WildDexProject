@@ -30,7 +30,8 @@ def login_user(request):
     display_dict['disabled'] = disabled
     if request.user is not None:
         if request.user.is_active:
-            display_dict['user_type'] = UserType.objects.get(pk=request.user)
+            if UserType.objects.filter(pk=request.user).exists():
+                display_dict['user_type'] = UserType.objects.get(pk=request.user)
     return render(request, 'index.html', display_dict)
 
 
