@@ -1,5 +1,5 @@
 from django.forms import inlineformset_factory
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect, HttpResponse
 from .models import UserType, Animal
 from .forms import CarerForm, UserProfileForm, AnimalForm, AnimalFormCarer
@@ -31,11 +31,11 @@ def login_user(request):
 
 def logout_user(request):
     logout(request)
-    return render(request, 'login.html')
+    return redirect('/login/')
 
 
-def user_home(request, user):
-    return render(request, 'home_templates/' + user + '_home.html', {'user': user})
+'''def user_home(request, user):
+    return render(request, 'home_templates/' + user + '_home.html', {'user': user})'''
 
 
 def add_animal(request, user):
