@@ -6,20 +6,43 @@
 
 </head>
 
+<body>
 {% if user.is_authenticated %}
+
     <h1>WildDex says... hello {{ user.username }}!</h1>
+
+
+
+
+    <p><a href="/add_user/">Add User</a></p>
+    <p><a href="/add_animal/">Add Animal</a></p>
+    <p><a href="/table/">View User Database</a></p>
+    <p><a href="/animal_table/">View Animal Database</a></p>
+
+    <a href="/about/">About</a><br/>
+    <a href="/logout/">Logout</a><br/>
 {% else %}
     <h1>WildDex says... hello Friends!</h1>
+    <h1>Login</h1>
+    <p>
+        {% if wrong_password %}
+            Your Username or Password was incorrect.
+        {% endif %}
+        {% if disabled %}
+            Your Account has been disabled.
+        {% endif %}
+    </p>
+    <form id="login_form" method="post">
+        {% csrf_token %}
+        Username: <input type="text" name="username" value="" size="50"/>
+        <br/>
+        Password: <input type="password" name="password" value="" size="50"/>
+        <br/>
+
+        <input type="submit" value="submit"/>
+    </form>
 {% endif %}
 
-<body>
-<p><a href="/add_user/">Add User</a></p>
-<p><a href="/add_animal/">Add Animal</a></p>
-<p><a href="/table/">View User Database</a></p>
-<p><a href="/animal_table/">View Animal Database</a></p>
-<p><a href="/register/">Register</a></p>
-<p><a href="/login/">Login</a></p>
-<a href="/about/">About</a><br />
-<a href="/logout/">Logout</a><br/>
 </body>
+
 </html>

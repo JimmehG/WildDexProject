@@ -1,8 +1,7 @@
-from django.forms import inlineformset_factory
 from django.shortcuts import render
 from django.http import HttpResponseRedirect, HttpResponse
 from .models import UserType, Animal
-from .forms import CarerForm, UserProfileForm, AnimalForm, AnimalFormCarer
+from .forms import UserForm, AnimalForm, AnimalFormCarer, BranchCForm, CarerForm, OfficeForm
 from django.contrib.auth import logout, authenticate, login
 # Create your views here.
 
@@ -12,6 +11,8 @@ def index(request):
 
 
 def login_user(request):
+    wrong_password = False
+    disabled = False
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
@@ -19,19 +20,17 @@ def login_user(request):
         if user is not None:
             if user.is_active:
                 login(request, user)
-                return HttpResponseRedirect('/login/')
+                # return HttpResponseRedirect('/')
             else:
-                return HttpResponse("Your account is disabled.")
+                disabled = True
         else:
-            print
-            ("Invalid login details: {0}, {1}".format(username, password))
-            return HttpResponse("Invalid login details supplied.")
-    return render(request, 'login.html')
+            wrong_password = True
+    return render(request, 'index.html', {'wrong_password': wrong_password, 'disabled': disabled})
 
 
 def logout_user(request):
     logout(request)
-    return render(request, 'login.html')
+    return HttpResponseRedirect('/')
 
 
 def user_home(request, user):
@@ -67,12 +66,16 @@ def edit_animal(request, animal_id, user):
     return render(request, 'animal_form.html', {'comment_form': form, 'user': user})
 
 
-def add_carer(request, user):
+def add_user(request):
+    pass
+
+
+def add_carer(request):
 
     # if this is a POST request we need to process the form data
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
-        form = CarerForm(request.POST)
+        form = UserForm(request.POST)
         # check whether it's valid:
         if form.is_valid():
             # process the data in form.cleaned_data as required
@@ -82,26 +85,12 @@ def add_carer(request, user):
 
     # if a GET (or any other method) we'll create a blank form
     else:
-        form = CarerForm()
+        form = UserForm()
 
     return render(request, 'user_form.html', {'comment_form': form})
 
 
-'''def manage_animals(request, caller_id):
-    caller = Caller.objects.get(pk=caller_id)
-    animal_inline_formset = inlineformset_factory(Caller, Animal, fields=('species', 'gender'))
-    if request.method == "POST":
-        formset = animal_inline_formset(request.POST, request.FILES, instance=caller)
-        if formset.is_valid():
-            formset.save()
-            # Do something. Should generally end with a redirect. For example:
-            return HttpResponseRedirect(caller.get_absolute_url())
-    else:
-        formset = animal_inline_formset(instance=caller)
-    return render(request, 'manage_books.html', {'formset': formset})'''
-
-
-def register(request, user):
+def register(request):
 
     # A boolean value for telling the template whether the registration was successful.
     # Set to False initially. Code changes value to True when registration succeeds.
@@ -111,11 +100,10 @@ def register(request, user):
     if request.method == 'POST':
         # Attempt to grab information from the raw form information.
         # Note that we make use of both UserForm and UserProfileForm.
-        user_form = CarerForm(data=request.POST)
-        profile_form = UserProfileForm(data=request.POST)
+        user_form = UserForm(request.POST)
 
         # If the two forms are valid...
-        if user_form.is_valid() and profile_form.is_valid():
+        if user_form.is_valid():
             # Save the user's form data to the database.
             user = user_form.save()
 
@@ -123,34 +111,77 @@ def register(request, user):
             # Once hashed, we can update the user object.
             user.set_password(user.password)
             user.save()
-
-            # Now sort out the UserProfile instance.
-            # Since we need to set the user attribute ourselves, we set commit=False.
-            # This delays saving the model until we're ready to avoid integrity problems.
-            profile = profile_form.save(commit=False)
-            profile.user = user
-
-            # Now we save the UserProfile model instance.
-            profile.save()
-
+            request.session['reg_user_id'] = user.pk
             # Update our variable to tell the template registration was successful.
-            registered = True
+            return HttpResponseRedirect('/reg_type/')
 
         # Invalid form or forms - mistakes or something else?
         # Print problems to the terminal.
         # They'll also be shown to the user.
         else:
-            print(user_form.errors, profile_form.errors)
+            print(user_form.errors)
 
     # Not a HTTP POST, so we render our form using two ModelForm instances.
     # These forms will be blank, ready for user input.
     else:
-        user_form = CarerForm()
-        profile_form = UserProfileForm()
+        user_form = UserForm()
 
     # Render the template depending on the context.
     return render(request, 'user_form.html',
-                  {'user_form': user_form, 'profile_form': profile_form, 'registered': registered})
+                  {'user_form': user_form, 'registered': registered})
+
+
+def reg_user_type(request):
+    registered = False
+    reg_user = UserType.objects.get(pk=request.session.get('reg_user_id'))
+
+    display_dict = {}
+
+    if request.method == 'POST':
+        valid = True
+        if reg_user.b_carer:
+            carer_form = CarerForm(request.POST)
+            display_dict['carer_form'] = carer_form
+            if carer_form.is_valid():
+                carer = carer_form.save()
+                reg_user.carer = carer
+            else:
+                valid = False
+        if reg_user.b_office:
+            office_form = OfficeForm(request.POST)
+            display_dict['office_form'] = office_form
+            if office_form.is_valid():
+                office = office_form.save()
+                reg_user.office = office
+            else:
+                valid = False
+        if reg_user.b_branch_c:
+            branch_c_form = BranchCForm(request.POST)
+            display_dict['branch_c_form'] = branch_c_form
+            if branch_c_form.is_valid():
+                branch_c = branch_c_form.save()
+                reg_user.branch_c = branch_c
+            else:
+                valid = False
+
+        if valid:
+            registered = True
+            reg_user.save()
+
+    else:
+        if reg_user.b_carer:
+            carer_form = CarerForm()
+            display_dict['carer_form'] = carer_form
+        if reg_user.b_office:
+            office_form = OfficeForm()
+            display_dict['office_form'] = office_form
+        if reg_user.b_branch_c:
+            branch_c_form = BranchCForm()
+            display_dict['branch_c_form'] = branch_c_form
+
+    display_dict['registered'] = registered
+    display_dict['reg_user'] = reg_user
+    return render(request, 'register_type.html', display_dict)
 
 
 def table(request):

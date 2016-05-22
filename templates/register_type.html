@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {{ form.media }} <!-- needed for JS/GoogleMaps lookup -->
+    <meta charset="UTF-8">
+    <title>Person Form</title>
+</head>
+
+<body>
+{% if registered %}
+    <strong>thank you for registering!</strong>
+    <a href="/">Return to your homepage.</a><br/>
+{% else %}
+    <strong>Register here!</strong><br/>
+    <form method="post">Step 2 of 2 :
+        <table style="width:50%">
+            {% csrf_token %}
+            {% if reg_user.b_carer %}
+                {{ carer_form.as_p }}
+        {% endif %}
+            {% if reg_user.b_office %}
+                {{ office_form.as_p }}
+            {% endif %}
+            {% if reg_user.b_branch_c %}
+                {{ branch_c_form.as_p }}
+            {% endif %}
+        </table>
+        <input type="submit" value="Submit"/>
+    </form>
+{% endif %}
+</body>
+</html>

@@ -42,16 +42,22 @@ class UserType(User):
     suburb = models.CharField(max_length=64, blank=False, null=True)
     postcode = AUPostCodeField(max_length=8, blank=False, null=True)
     availabilities = models.CharField(max_length=128, blank=False, null=True)
+    b_office = models.BooleanField()
+    b_carer = models.BooleanField()
+    b_branch_c = models.BooleanField()
+    office = models.OneToOneField('OfficeVolunteer', null=True, on_delete=models.CASCADE)
+    carer = models.OneToOneField('Carer', null=True, on_delete=models.CASCADE)
+    branch_c = models.OneToOneField('BranchCoordinator', null=True, on_delete=models.CASCADE)
 
     def __unicode__(self):
         return self.username
 
 
-class OfficeVolunteer(UserType):
+class OfficeVolunteer(models.Model):
     office_number = AUPhoneNumberField(blank=False, null=True)
 
 
-class Carer(UserType):
+class Carer(models.Model):
     animals = models.ManyToManyField('Animal')
     branch_coordinator = models.ForeignKey('BranchCoordinator', on_delete=models.SET_NULL, null=True)
     specialty = models.CharField(max_length=128, blank=True)
@@ -59,7 +65,7 @@ class Carer(UserType):
     vaccinations = models.CharField(max_length=128, blank=True)
 
 
-class BranchCoordinator(UserType):
+class BranchCoordinator(models.Model):
     branch = models.CharField(max_length=128, blank=True)
     animals = models.ManyToManyField('Animal')
     specialty = models.CharField(max_length=128, blank=True)

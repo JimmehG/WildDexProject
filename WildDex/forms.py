@@ -1,27 +1,34 @@
 from django import forms
 from django.forms import ModelForm
-from django.contrib.auth.models import User
-from .models import UserType, Animal
+from .models import UserType, Animal, Carer, BranchCoordinator, OfficeVolunteer
 
 
-class CarerForm(ModelForm):
+class UserForm(ModelForm):
     password = forms.CharField(widget=forms.PasswordInput())
 
     class Meta:
-        model = User
-        fields = ['username', 'email', 'password']
-
-
-class UserProfileForm(ModelForm):
-    class Meta:
         model = UserType
-        fields = ['first_name', 'last_name', 'street_num_name', 'suburb', 'postcode', 'phone_number']
+        fields = ['username', 'email', 'password', 'first_name', 'last_name', 'street_num_name', 'suburb', 'postcode',
+                  'phone_number', 'b_branch_c',
+                  'b_office', 'b_carer']
 
-'''class UserForm(ModelForm):
+
+class BranchCForm(ModelForm):
     class Meta:
-        model = User
-        fields = ['first_name', 'last_name', 'email_address', 'street_num_name', 'suburb', 'postcode',
-         'phone_number']'''
+        model = BranchCoordinator
+        fields = ['branch', 'specialty', 'facilities', 'vaccinations']
+
+
+class CarerForm(ModelForm):
+    class Meta:
+        model = Carer
+        fields = ['branch_coordinator', 'specialty', 'facilities', 'vaccinations']
+
+
+class OfficeForm(ModelForm):
+    class Meta:
+        model = OfficeVolunteer
+        fields = '__all__'
 
 
 class AnimalForm(ModelForm):

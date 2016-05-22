@@ -7,20 +7,16 @@
 </head>
 
 <body>
-{% if registered %}
-    <strong>thank you for registering!</strong>
-    <a href="//">Return to the homepage.</a><br/>
-{% else %}
-    <strong>register here!</strong><br/>
-
-    <form method="post">login
+<strong>Register here!</strong><br/>
+<form method="post">Step 1 of 2 :
     <table style="width:50%">
     {% csrf_token %}
         {{ user_form.as_p }}
         {{ profile_form.as_p }}
     </table>
     <input type="submit" value="Submit"/>
+
+    <a href="/">Return to your homepage.</a><br/>
 </form>
-{% endif %}
 </body>
 </html>
