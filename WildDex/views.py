@@ -39,37 +39,39 @@ def logout_user(request):
     return HttpResponseRedirect('/')
 
 
-def user_home(request, user):
-    return render(request, 'home_templates/' + user + '_home.html', {'user': user})
-
-
-def add_animal(request, user):
+def add_animal(request):
     if request.method == 'POST':
         form = AnimalForm(request.POST)
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect('/' + user + '/animal_table/')
+            return HttpResponseRedirect('/animal_table/')
     else:
         form = AnimalForm()
-    return render(request, 'animal_form.html', {'comment_form': form, 'user': user})
+    return render(request, 'animal_form.html', {'comment_form': form})
 
 
-def edit_animal(request, animal_id, user):
+def edit_animal(request, animal_id):
     animal = Animal.objects.get(pk=animal_id)
     if request.method == 'POST':
-        if user == 'carer':
-            form = AnimalFormCarer(request.POST, instance=animal)
-        else:
-            form = AnimalForm(request.POST, instance=animal)
+        form = AnimalForm(request.POST, instance=animal)
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect('/' + user + '/animal_table/')
+            return HttpResponseRedirect('/animal_table/')
     else:
-        if user == 'carer':
-            form = AnimalFormCarer(instance=animal)
-        else:
-            form = AnimalForm(instance=animal)
-    return render(request, 'animal_form.html', {'comment_form': form, 'user': user})
+        form = AnimalForm(instance=animal)
+    return render(request, 'animal_form.html', {'comment_form': form})
+
+
+def edit_animal_carer(request, animal_id):
+    animal = Animal.objects.get(pk=animal_id)
+    if request.method == 'POST':
+        form = AnimalFormCarer(request.POST, instance=animal)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('/animal_table/')
+    else:
+        form = AnimalFormCarer(instance=animal)
+    return render(request, 'animal_form.html', {'comment_form': form})
 
 
 def add_user(request):
@@ -195,14 +197,14 @@ def table(request):
     return render(request, 'table.html', {'query': query})
 
 
-def animal_table(request, user):
+def animal_table(request):
     query = Animal.objects.all()
-    return render(request, 'animal_table.html', {'query': query, 'user': user})
+    return render(request, 'animal_table.html', {'query': query})
 
 
 def submitted(request):
     return render(request, 'submitted.html')
 
 
-def about(request, user=None):
-    return render(request, 'about.html', {'user': user})
+def about(request):
+    return render(request, 'about.html')
