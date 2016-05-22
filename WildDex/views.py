@@ -13,6 +13,7 @@ def index(request):
 def login_user(request):
     wrong_password = False
     disabled = False
+    display_dict = {}
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
@@ -20,12 +21,17 @@ def login_user(request):
         if user is not None:
             if user.is_active:
                 login(request, user)
+                user_type = UserType.objects.get(pk=user)
+                display_dict['user_type'] = user_type
+                print(user_type.b_office)
                 # return HttpResponseRedirect('/')
             else:
                 disabled = True
         else:
             wrong_password = True
-    return render(request, 'index.html', {'wrong_password': wrong_password, 'disabled': disabled})
+    display_dict['wrong_password'] = wrong_password
+    display_dict['disabled'] = disabled
+    return render(request, 'index.html', display_dict)
 
 
 def logout_user(request):

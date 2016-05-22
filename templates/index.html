@@ -10,15 +10,18 @@
 {% if user.is_authenticated %}
 
     <h1>WildDex says... hello {{ user.username }}!</h1>
-
-
-
-
-    <p><a href="/add_user/">Add User</a></p>
-    <p><a href="/add_animal/">Add Animal</a></p>
-    <p><a href="/table/">View User Database</a></p>
-    <p><a href="/animal_table/">View Animal Database</a></p>
-
+    {% if user.is_superuser %}
+        {% include "home_templates/admin_home.html" %}
+    {% endif %}
+    {% if user_type.b_carer %}
+        {% include "home_templates/carer_home.html" %}
+    {% endif %}
+    {% if user_type.b_office %}
+        {% include "home_templates/office_home.html" %}
+    {% endif %}
+    {% if user_type.b_branch_c %}
+        {% include "home_templates/branchc_home.html" %}
+    {% endif %}
     <a href="/about/">About</a><br/>
     <a href="/logout/">Logout</a><br/>
 {% else %}
