@@ -21,9 +21,6 @@ def login_user(request):
         if user is not None:
             if user.is_active:
                 login(request, user)
-                user_type = UserType.objects.get(pk=user)
-                display_dict['user_type'] = user_type
-                print(user_type.b_office)
                 # return HttpResponseRedirect('/')
             else:
                 disabled = True
@@ -31,6 +28,9 @@ def login_user(request):
             wrong_password = True
     display_dict['wrong_password'] = wrong_password
     display_dict['disabled'] = disabled
+    if request.user is not None:
+        if request.user.is_active:
+            display_dict['user_type'] = UserType.objects.get(pk=request.user)
     return render(request, 'index.html', display_dict)
 
 
@@ -119,7 +119,7 @@ def register(request):
             # Once hashed, we can update the user object.
             user.set_password(user.password)
             user.save()
-            request.session['reg_user_id'] = user.pk
+            request.session['reg_user_id'] = user
             # Update our variable to tell the template registration was successful.
             return HttpResponseRedirect('/reg_type/')
 
