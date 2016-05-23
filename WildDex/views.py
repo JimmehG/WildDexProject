@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect, HttpResponse
-from .models import UserType, Animal
+from .models import UserType, Animal, OfficeVolunteer
 from .forms import UserForm, AnimalForm, AnimalFormCarer, BranchCForm, CarerForm, OfficeForm
 from django.contrib.auth import logout, authenticate, login
 # Create your views here.
@@ -44,8 +44,11 @@ def add_animal(request):
     if request.method == 'POST':
         form = AnimalForm(request.POST)
         if form.is_valid():
-            form.save()
-            return HttpResponseRedirect('/animal_table/')
+            new_animal = form.save(commit=False)
+            new_animal.office_volunteer = OfficeVolunteer.objects.get(
+                pk=UserType.objects.get(pk=request.user).office.pk)
+            new_animal.save()
+            return HttpResponseRedirect('/office_animal_table/')
     else:
         form = AnimalForm()
     return render(request, 'animal_form.html', {'comment_form': form})
@@ -57,7 +60,7 @@ def edit_animal(request, animal_id):
         form = AnimalForm(request.POST, instance=animal)
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect('/animal_table/')
+            return HttpResponseRedirect('/office_animal_table/')
     else:
         form = AnimalForm(instance=animal)
     return render(request, 'animal_form.html', {'comment_form': form})
@@ -69,7 +72,7 @@ def edit_animal_carer(request, animal_id):
         form = AnimalFormCarer(request.POST, instance=animal)
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect('/animal_table/')
+            return HttpResponseRedirect('/carer_animal_table/')
     else:
         form = AnimalFormCarer(instance=animal)
     return render(request, 'animal_form.html', {'comment_form': form})
@@ -120,7 +123,7 @@ def register(request):
             # Once hashed, we can update the user object.
             user.set_password(user.password)
             user.save()
-            request.session['reg_user_id'] = user
+            request.session['reg_user_id'] = user.pk
             # Update our variable to tell the template registration was successful.
             return HttpResponseRedirect('/reg_type/')
 

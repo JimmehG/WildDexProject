@@ -22,8 +22,8 @@
             <td>{{ item.care_purpose }}</td>
             <td>{{ item.status }}</td>
             <td>{{ item.branch_coordinator }}</td>
-            <td>{{ item.office_volunteer }}</td>
-            <td><a href="/{{ user }}/edit_animal/{{ item.pk }}">Edit</a></td>
+            <td>{{ item.office_volunteer.pk }}</td>
+            <td><a href="/edit_animal/{{ item.pk }}">Edit</a></td>
         </tr>
     {% endfor %}
 </table>

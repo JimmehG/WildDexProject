@@ -36,7 +36,7 @@ class AnimalForm(ModelForm):
         model = Animal
         fields = ['caller_name', 'caller_number', 'street_num_name', 'suburb', 'postcode', 'species',
                   'gender', 'encounter_date', 'encounter_location', 'care_purpose', 'status',
-                  'branch_coordinator', 'office_volunteer']
+                  'branch_coordinator']
 
 
 class AnimalFormCarer(ModelForm):
