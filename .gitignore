@@ -5,3 +5,5 @@ WildDex/migrations/0001_initial.py
 WildDex/migrations/__pycache__/
 WildDexProject/__pycache__/
 admin/
+WildDex/migrations/0002_auto_20160525_0318.py
+WildDexProject/media/animal_pictures
