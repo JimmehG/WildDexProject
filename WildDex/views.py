@@ -78,9 +78,12 @@ def office_edit_animal(request, animal_id):
 def branch_edit_animal(request, animal_id):
     animal = Animal.objects.get(pk=animal_id)
     if request.method == 'POST':
-        form = AnimalForm(request.POST, instance=animal)
+        form = AnimalForm(request.POST, request.FILES, instance=animal)
         if form.is_valid():
-            form.save()
+            temp_animal = form.save(commit=False)
+            if 'picture' in request.FILES:
+                temp_animal.picture = request.FILES['picture']
+            temp_animal.save()
             return HttpResponseRedirect('/branch_animal_table/')
     else:
         form = AnimalForm(instance=animal)
