@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<p>Is the animal sick, injured, likely to have been injured or an orphan?</p>
+{% if not pressed1 %}
+    <form method="post">{% csrf_token %}
+        <button type="submit" name="yes1">Yes</button>
+        <button type="submit" name="no1">No</button>
+    </form>
+{% else %}
+    {{ words1 |safe }}
+    {% if not pressed2 %}
+        <form method="post">{% csrf_token %}
+            <button type="submit" name="yes2">Yes</button>
+            <button type="submit" name="no2">No</button>
+        </form>
+    {% else %}
+        <p>{{ words2 }}</p>
+        <p>Is the above information correct?</p>
+        <form method="post">{% csrf_token %}
+            <button type="submit" name="yes3" formaction="/check/">Yes</button>
+            <button type="submit" name="no3" formmethod="get">No</button>
+        </form>
+    {% endif %}
+{% endif %}
+</body>
+</html>

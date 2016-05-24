@@ -34,13 +34,10 @@ class OfficeForm(ModelForm):
 class AnimalForm(ModelForm):
     class Meta:
         model = Animal
-        fields = ['caller_name', 'caller_number', 'street_num_name', 'suburb', 'postcode', 'species',
-                  'gender', 'encounter_date', 'encounter_location', 'care_purpose', 'status',
-                  'branch_coordinator']
+        fields = '__all__'
 
 
 class AnimalFormCarer(ModelForm):
     class Meta:
         model = Animal
-        fields = ['species', 'gender', 'encounter_date', 'encounter_location', 'care_purpose', 'status',
-                  'branch_coordinator']
+        exclude = ['status', 'carer', 'office_volunteer', 'branch_coordinator', 'assessed', 'picked_up']

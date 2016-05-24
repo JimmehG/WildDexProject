@@ -1,2 +1,7 @@
 /.idea
 db.sqlite3
+WildDex/__pycache__/
+WildDex/migrations/0001_initial.py
+WildDex/migrations/__pycache__/
+WildDexProject/__pycache__/
+admin/

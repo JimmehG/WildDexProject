@@ -1,0 +1,20 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<!--TODO THIS PAGE NEEDS TO BE CUSTOMISED FOR EACH RESPONSE AS IT IS QUITE ROBOTIC ATM-->
+<p>THIS PAGE NEEDS TO BE CUSTOMISED FOR EACH RESPONSE AS IT IS QUITE ROBOTIC ATM (WIP)</p>
+<p>The outcome of this {{ animal.get_species_display }} is {{ animal.get_status_display }}. This information has been
+    sent to the appropriate branch coordinator for assessment</p>
+{% if animal.status == 1 %}
+    <p>You are now required to fill out this animal's form to ensure it's information is correct. You can do so <a
+            href="/carer_edit_animal/{{ animal.pk }}">Here</a></p>
+{% endif %}
+
+
+<p><a href="/">Home</a></p>
+
+</body>
+</html>

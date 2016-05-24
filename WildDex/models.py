@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 
 
 # Create your models here.
-# ID CREATED AUTOMATICALLY. as id = models.AutoField(primary_key=True)
+# ID CREATED AUTOMATICALLY. as id = models.AutoField(primary_key=True). can be accessed with .pk or .id
 
 class Animal(models.Model):
     SPECIES_CHOICES = (
@@ -16,13 +16,12 @@ class Animal(models.Model):
         ('BTP', 'Brushtail Possum'),
         ('GFF', 'Grey-headded Flying Fox')
     )
-    species = models.CharField(max_length=64, choices=SPECIES_CHOICES, blank=True)
+    species = models.CharField(max_length=3, choices=SPECIES_CHOICES, blank=True)
     GENDER_CHOICES = (
         ('M', 'Male'),
         ('F', 'Female'),
     )
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES, blank=True)
-    prev_carers = models.ManyToManyField('Carer', blank=True)
     caller_name = models.CharField(max_length=128, blank=False, null=True)
     caller_number = AUPhoneNumberField(blank=False, null=True)
     street_num_name = models.CharField(max_length=256, blank=False, null=True)
@@ -30,10 +29,31 @@ class Animal(models.Model):
     postcode = AUPostCodeField(max_length=8, blank=True)
     encounter_location = models.CharField(max_length=256, blank=True)
     encounter_date = models.DateField(blank=False, null=True)
-    care_purpose = models.CharField(max_length=256, blank=True)
-    status = models.CharField(max_length=256, blank=True)
+    injury = models.CharField(max_length=128, blank=True)
+    cause_of_injury = models.CharField(max_length=128, blank=True)
+    STATUS_CHOICES = (
+        (0, 'Humanely euthanased'),
+        (1, 'In Care'),
+        (2, 'Relocated'),
+        (3, 'No action'),
+    )
+    status = models.IntegerField(null=True, blank=True, choices=STATUS_CHOICES)
+    status_detail = models.CharField(max_length=128, blank=True)
+    status_date = models.DateField(blank=True, null=True)
+    carer = models.ForeignKey('Carer', on_delete=models.SET_NULL, null=True, blank=True)
+    # prev_carers = models.ManyToManyField('Carer', blank=True) SORRY NO PREVIOUS CARERS FOR NOW
     branch_coordinator = models.ForeignKey('BranchCoordinator', on_delete=models.SET_NULL, null=True, blank=True)
     office_volunteer = models.ForeignKey('OfficeVolunteer', on_delete=models.SET_NULL, null=True, blank=True)
+    picture = models.ImageField(upload_to='animal_pictures', null=True, blank=True)
+    r_weight = models.FloatField(max_length=10, blank=True, null=True)
+    AGE_CHOICES = (
+        (0, 'Baby'),
+        (1, 'Juvenile'),
+        (2, 'Adult')
+    )
+    age = models.IntegerField(choices=AGE_CHOICES, blank=True, null=True)
+    assessed = models.BooleanField(default=False)
+    picked_up = models.BooleanField(default=False)
 
 
 class UserType(User):
@@ -58,7 +78,6 @@ class OfficeVolunteer(models.Model):
 
 
 class Carer(models.Model):
-    animals = models.ManyToManyField('Animal')
     branch_coordinator = models.ForeignKey('BranchCoordinator', on_delete=models.SET_NULL, null=True)
     specialty = models.CharField(max_length=128, blank=True)
     facilities = models.CharField(max_length=128, blank=True)
@@ -67,7 +86,6 @@ class Carer(models.Model):
 
 class BranchCoordinator(models.Model):
     branch = models.CharField(max_length=128, blank=True)
-    animals = models.ManyToManyField('Animal')
     specialty = models.CharField(max_length=128, blank=True)
     facilities = models.CharField(max_length=128, blank=True)
     vaccinations = models.CharField(max_length=128, blank=True)
@@ -78,3 +96,4 @@ class BranchCoordinator(models.Model):
     suburb = models.CharField(max_length=64, blank=False, null=True)
     postcode = AUPostCodeField(max_length=8, blank=False, null=True)
     phone_number = AUPhoneNumberField(blank=False, null=True)'''
+
