@@ -37,16 +37,30 @@
                 {% if user.is_authenticated %}
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                           aria-expanded="false">Dropdown <span class="caret"></span></a>
+                           aria-expanded="false">Selection <span class="caret"></span></a>
+                        {% if user.is_superuser %}
                         <ul class="dropdown-menu">
-                            <li><a href="#">Action</a></li>
-                            <li><a href="#">Another action</a></li>
-                            <li><a href="#">Something else here</a></li>
-                            <li role="separator" class="divider"></li>
-                            <li class="dropdown-header">Nav header</li>
-                            <li><a href="#">Separated link</a></li>
-                            <li><a href="#">One more separated link</a></li>
+                            <li><a href="/add_user/">Add User</a></li>
+                            <li><a href="/admin/">Administration</a></li>
                         </ul>
+                        {% endif %}
+                        {% if user_type.b_carer %}
+                            <ul class="dropdown-menu">
+                                <li><a href="/carer_animal_table/">Check Database</a></li>
+                            </ul>
+                        {% endif %}
+                        {% if user_type.b_office %}
+                            <ul class="dropdown-menu">
+                                <li><a href="/add_animal/">Add Animal</a></li>
+                                <li><a href="/office_animal_table/">View Office Animal Database</a></li>
+                            </ul>
+                        {% endif %}
+                        {% if user_type.b_branch_c %}
+                            <ul class="dropdown-menu">
+                                <li><a href="/branch_animal_table/">View Branch Animal Database</a></li>
+                            </ul>
+                        {% endif %}
+
                     </li>
                     <li><a>Welcome {{ user.username }}</a></li>
                     <li><a href="/logout/">Logout</a></li>

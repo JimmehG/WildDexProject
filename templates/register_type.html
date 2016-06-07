@@ -6,34 +6,58 @@
 {% block content %}
     <div class="container">
 {% if registered %}
-    <h2 class="text-center">thank you for registering!</h2>
-    <a class="text-center" href="/">Return to your homepage.</a><br/>
+    <h2 class="text-left">thank you for registering!</h2>
+    <a class="text-left" href="/">Return to your homepage.</a><br/>
 {% else %}
-    <h2 class="text-center">Register here!</h2>
-    <h3 class="text-center">Step 2 of 2 :</h3>
-    <div class="col-md-offset-4 main content clearfix">
-    <form class="form-horizontal" method="post">
+    <h2 class="text-left">Register here!</h2>
+    <h3 class="text-left">Step 2 of 2 :</h3>
+    <form method="post" enctype="multipart/form-data">
+        <table>
+            <div class="">
 
         <div class="form-group" align="left">
             {% csrf_token %}
             {% if reg_user.b_carer %}
-                <h3>Carer:</h3>
-                {{ carer_form.as_p }}
+                <h3 class="text-left">Carer:</h3>
+                {% for field in carer_form %}
+                    <tr>
+                        <td>{{ field.label_tag }}</td>
+                        <td>{{ field }}</td>
+                        <td>{{ field.errors }}</td>
+                    </tr>
+                {% endfor %}
         {% endif %}
             {% if reg_user.b_office %}
+                {% for field in office_form %}
                 <h3>Office Volunteer:</h3>
-                {{ office_form.as_p }}
+                    <tr>
+                        <td>{{ field.label_tag }}</td>
+                        <td>{{ field }}</td>
+                        <td>{{ field.errors }}</td>
+                    </tr>
+                {% endfor %}
             {% endif %}
             {% if reg_user.b_branch_c %}
-                <h3>Branch Coordinator:</h3>
-                {{ branch_c_form.as_p }}
+                <h3 class="text-left">Branch Coordinator:</h3>
+                {% for field in branch_c_form %}
+                    <tr>
+                        <td>{{ field.label_tag }}</td>
+                        <td>{{ field }}</td>
+                        <td>{{ field.errors }}</td>
+                    </tr>
+                {% endfor %}
             {% endif %}
         </div>
+            </div>
+        </table>
         <div align="left">
             <button class="btn btn-primary" type="submit">submit</button>
         </div>
+
+
     </form>
+
 {% endif %}
-        </div>
+
     </div>
 {% endblock %}

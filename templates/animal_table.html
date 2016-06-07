@@ -5,7 +5,7 @@
     <title>Title</title>
 </head>
 <body>
-<table>
+<table class="table table-condensed">
     <tr>
         <td>Record Number</td>
         <td>Picture</td>
@@ -15,7 +15,7 @@
         <tr>
             <td><a href="/view_animal/{{ item.pk }}">{{ item.species }}{{ item.pk }}</a></td>
             <td>{% if item.picture %}
-                <a href="/view_animal/{{ item.pk }}"><img src="{{ item.picture.url }}" width="64"/></a>{% endif %}</td>
+                <a href="/view_animal/{{ item.pk }}"><img src="{{ item.picture.url }}" width="128"/></a>{% endif %}</td>
             <td>{{ item.get_species_display }}</td>
         </tr>
     {% endfor %}
