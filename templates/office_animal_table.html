@@ -1,11 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-<table>
+{% extends "base1.html" %}
+{% block content %}
+    <h2 class="text-center">Animal Form</h2>
+    <div class="table-responsive">
+        <table class="table table-hover">
     <tr>
         <td>Record Number</td>
         <td>Picture</td>
@@ -34,7 +31,7 @@
     {% for item in query %}
         <tr>
             <td>{{ item.species }}{{ item.pk }}</td>
-            <td>{% if item.picture %}<img src="{{ item.picture.url }}"/>{% endif %}</td>
+            <td>{% if item.picture %}<img src="{{ item.picture.url }}" width="64"/>{% endif %}</td>
             <td>{{ item.get_species_display }}</td>
             <td>{{ item.get_gender_display }}</td>
             <td>{{ item.encounter_date }}</td>
@@ -54,11 +51,10 @@
             <td>{{ item.suburb }} </td>
             <td>{{ item.postcode }}</td>
             <td>{{ item.picked_up }}</td>
-            <td>{{ item.asessed }}</td>
-            <td><a href="/office_edit_animal/{{ item.pk }}">Edit</a></td>
+            <td>{% if item.assessed %}True{% else %}False{% endif %}</td>
         </tr>
     {% endfor %}
 </table>
-<p><a href="/">Home</a></p>
-</body>
-</html>
+    </div>
+    <p class="text-center"><a href="/">Home</a></p>
+{% endblock %}

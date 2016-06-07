@@ -1,19 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    {{ form.media }} <!-- needed for JS/GoogleMaps lookup -->
-    <meta charset="UTF-8">
-    <title>Animal Form</title>
-</head>
-<body>
-<form method="post">
-    <table style="width:50%">
-        {% csrf_token %}
-        {% include "form_snippet.html" with form=comment_form %}
-    </table>
-    <input type="submit" value="Submit"/>
-</form>
+{% extends "base1.html" %}
+{% block content %}
+    <h2 class="text-center">Animal Form</h2>
+    <div class="container">
 
-<p><a href="/">Home</a></p>
-</body>
+        <form method="post" enctype="multipart/form-data">
+            {% for field in comment_form %}
+                <div class="form-group" align="center">
+        {% csrf_token %}
+                    {{ field.label_tag }}
+                    <div class="">
+                        {{ field }}
+                    </div>
+                    {{ field.errors }}
+                </div>
+            {% endfor %}
+
+            <p class="text-center"><a href="/">Home</a></p>
+        </form>
+    </div>
+
 </html>
+{% endblock %}

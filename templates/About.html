@@ -1,16 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>About</title>
-</head>
-<body>
+{% extends "base1.html" %}
 
-</body>
-<h1>WildDex</h1>
-<p>Worked for the Sydney Wildlife Group</p>
-<p>Developed by Macquarie University </p>
-<p>
+{% block title %}About{% endblock %}
+
+{% block content %}
+    <div class="text-center">
+        <h1>WildDex</h1>
+    </div>
+    <div>
+        <p class="text-center">Worked for the Sydney Wildlife Group</p>
+        <p class="text-center">Developed by Macquarie University </p>
+        <p class="text-center">
     {% if user %}
         <a href="/">Home</a>
     {% else %}
@@ -18,4 +17,5 @@
         <a href="/">Login Page</a>
     {% endif %}
 </p>
-</html>
+    </div>
+{% endblock %}

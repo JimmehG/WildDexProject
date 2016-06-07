@@ -57,6 +57,7 @@ def add_animal(request):
                 new_animal.picture = request.FILES['picture']
             new_animal.save()
             return HttpResponseRedirect('/office_animal_table/')
+
     else:
         form = AnimalForm()
     return render(request, 'animal_form.html', {'comment_form': form})

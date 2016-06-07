@@ -1,19 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    {{ form.media }} <!-- needed for JS/GoogleMaps lookup -->
-    <meta charset="UTF-8">
-    <title>Person Form</title>
-</head>
+{% extends "base1.html" %}
 
-<body>
+
+{% block title %}Person Form{% endblock %}
+
+{% block content %}
+    <div class="container">
 {% if registered %}
-    <strong>thank you for registering!</strong>
-    <a href="/">Return to your homepage.</a><br/>
+    <h2 class="text-center">thank you for registering!</h2>
+    <a class="text-center" href="/">Return to your homepage.</a><br/>
 {% else %}
-    <strong>Register here!</strong><br/>
-    <form method="post">Step 2 of 2 :
-        <table style="width:50%">
+    <h2 class="text-center">Register here!</h2>
+    <h3 class="text-center">Step 2 of 2 :</h3>
+    <div class="col-md-offset-4 main content clearfix">
+    <form class="form-horizontal" method="post">
+
+        <div class="form-group" align="left">
             {% csrf_token %}
             {% if reg_user.b_carer %}
                 <h3>Carer:</h3>
@@ -27,9 +28,12 @@
                 <h3>Branch Coordinator:</h3>
                 {{ branch_c_form.as_p }}
             {% endif %}
-        </table>
-        <input type="submit" value="Submit"/>
+        </div>
+        <div align="left">
+            <button class="btn btn-primary" type="submit">submit</button>
+        </div>
     </form>
 {% endif %}
-</body>
-</html>
+        </div>
+    </div>
+{% endblock %}

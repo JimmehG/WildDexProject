@@ -1,31 +1,49 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "base1.html" %}
+{% block content %}
+    <div class="container">
+        <div class="page-header">
+            <h1>Pick Up Questions</h1>
+        </div>
+        <div class="row">
+            <div class="col-md-offset-5 main content clearfix" align="center">
+                <div class="list-group">
+                    <a href="#" class="list-group-item active">
+                        Pick UP
+                    </a>
+                    <div class="form-group" align="center">
 <p>Is the animal sick, injured, likely to have been injured or an orphan?</p>
 {% if not pressed1 %}
     <form method="post">{% csrf_token %}
-        <button type="submit" name="yes1">Yes</button>
-        <button type="submit" name="no1">No</button>
+        <div align="center">
+            <button class="btn btn-primary" type="submit" name="yes1">Yes</button>
+            <button class="btn btn-primary" type="submit" name="no1">No</button>
+        </div>
     </form>
 {% else %}
     {{ words1 |safe }}
     {% if not pressed2 %}
         <form method="post">{% csrf_token %}
-            <button type="submit" name="yes2">Yes</button>
-            <button type="submit" name="no2">No</button>
+            <div align="center">
+                <button class="btn btn-primary" type="submit" name="yes2">Yes</button>
+                <button class="btn btn-primary" type="submit" name="no2">No</button>
+            </div>
         </form>
     {% else %}
         <p>{{ words2 }}</p>
         <p>Is the above information correct?</p>
         <form method="post">{% csrf_token %}
-            <button type="submit" name="yes3" formaction="/check/">Yes</button>
-            <button type="submit" name="no3" formmethod="get">No</button>
+            <div align="center">
+                <button class="btn btn-primary" type="submit" name="yes3" formaction="/check/">Yes</button>
+                <button class="btn btn-primary" type="submit" name="no3" formmethod="get">No</button>
+            </div>
         </form>
     {% endif %}
 {% endif %}
-</body>
-</html>
+                    </div>
+                </div>
+            </div><!-- /.col-sm-4 -->
+
+        </div>
+
+    </div>
+{% endblock %}
