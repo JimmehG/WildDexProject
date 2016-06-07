@@ -7,23 +7,16 @@
 <body>
 <table>
     <tr>
+        <td>Record Number</td>
+        <td>Picture</td>
+        <td>Species</td>
     </tr>
     {% for item in query %}
         <tr>
+            <td><a href="/view_animal/{{ item.pk }}">{{ item.species }}{{ item.pk }}</a></td>
+            <td>{% if item.picture %}
+                <a href="/view_animal/{{ item.pk }}"><img src="{{ item.picture.url }}" width="64"/></a>{% endif %}</td>
             <td>{{ item.get_species_display }}</td>
-            <td>{{ item.get_gender_display }}</td>
-            <td>{{ item.caller_name }} </td>
-            <td>{{ item.caller_number }} </td>
-            <td>{{ item.street_num_name }} </td>
-            <td>{{ item.suburb }} </td>
-            <td>{{ item.postcode }}</td>
-            <td>{{ item.encounter_date }}</td>
-            <td>{{ item.encounter_location }}</td>
-            <td>{{ item.care_purpose }}</td>
-            <td>{{ item.status }}</td>
-            <td>{{ item.branch_coordinator }}</td>
-            <td>{{ item.office_volunteer.pk }}</td>
-            <td><a href="/edit_animal/{{ item.pk }}">Edit</a></td>
         </tr>
     {% endfor %}
 </table>

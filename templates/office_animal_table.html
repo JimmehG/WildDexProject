@@ -34,7 +34,7 @@
     {% for item in query %}
         <tr>
             <td>{{ item.species }}{{ item.pk }}</td>
-            <td><img src="{{ item.picture.url }}"/></td>
+            <td>{% if item.picture %}<img src="{{ item.picture.url }}"/>{% endif %}</td>
             <td>{{ item.get_species_display }}</td>
             <td>{{ item.get_gender_display }}</td>
             <td>{{ item.encounter_date }}</td>

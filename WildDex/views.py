@@ -7,6 +7,8 @@ from django.utils.datetime_safe import date
 from .models import UserType, Animal, OfficeVolunteer, Carer, BranchCoordinator
 from .forms import UserForm, AnimalForm, AnimalFormCarer, BranchCForm, CarerForm, OfficeForm
 from django.contrib.auth import logout, authenticate, login
+
+
 # Create your views here.
 
 
@@ -25,7 +27,7 @@ def login_user(request):
         if user is not None:
             if user.is_active:
                 login(request, user)
-                # return HttpResponseRedirect('/')
+            # return HttpResponseRedirect('/')
             else:
                 disabled = True
         else:
@@ -157,7 +159,6 @@ def add_user(request):
 
 
 def add_carer(request):
-
     # if this is a POST request we need to process the form data
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
@@ -208,8 +209,7 @@ def register(request):
         user_form = UserForm()
 
     # Render the template depending on the context.
-    return render(request, 'user_form.html',
-                  {'user_form': user_form})
+    return render(request, 'user_form.html', {'user_form': user_form})
 
 
 def reg_user_type(request):
@@ -280,7 +280,7 @@ def branch_animal_table(request):
     display_dict = {}
     if UserType.objects.filter(pk=request.user).exists:
         display_dict['query'] = Animal.objects.filter(branch_coordinator=UserType.objects.get(pk=request.user).branch_c)
-    return render(request, 'branch_animal_table.html', display_dict)
+    return render(request, 'animal_table.html', display_dict)
 
 
 def office_animal_table(request):
@@ -294,7 +294,12 @@ def carer_animal_table(request):
         query = Animal.objects.filter(carer=UserType.objects.get(pk=request.user).carer)
         query.filter(Q(status__isnull=True, picked_up=False) | Q(status=1, picked_up=True))
         display_dict['query'] = query
-    return render(request, 'carer_animal_table.html', display_dict)
+    return render(request, 'animal_table.html', display_dict)
+
+
+def view_animal(request, animal_id):
+    animal = Animal.objects.get(pk=animal_id)
+    return render(request, 'view_animal.html', {'item': animal})
 
 
 def carer_edit_animal(request, animal_id):
