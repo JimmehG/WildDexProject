@@ -2,6 +2,7 @@ from django.db import models
 from localflavor.au.models import AUPhoneNumberField, AUPostCodeField
 from django.contrib.auth.models import User
 
+
 # from address.models import AddressField CHANGE ADDRESS TO LOCALFLAVOR AND CHARFIELDS
 
 
@@ -24,7 +25,7 @@ class Animal(models.Model):
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES, blank=True)
     caller_name = models.CharField(max_length=128, blank=False, null=True)
     caller_number = AUPhoneNumberField(blank=False, null=True)
-    street_num_name = models.CharField(max_length=256, blank=False, null=True)
+    caller_address = models.CharField(max_length=256, blank=False, null=True)
     suburb = models.CharField(max_length=64, blank=False, null=True)
     postcode = AUPostCodeField(max_length=8, blank=True)
     encounter_location = models.CharField(max_length=256, blank=True)
@@ -58,10 +59,22 @@ class Animal(models.Model):
 
 class UserType(User):
     phone_number = AUPhoneNumberField(blank=False, null=True)
-    street_num_name = models.CharField(max_length=256, blank=False, null=True)
+    address = models.CharField(max_length=256, blank=False, null=True)
     suburb = models.CharField(max_length=64, blank=False, null=True)
     postcode = AUPostCodeField(max_length=8, blank=False, null=True)
     availabilities = models.CharField(max_length=128, blank=False, null=True)
+    b_office = models.BooleanField()
+    b_carer = models.BooleanField()
+    b_branch_c = models.BooleanField()
+    office = models.OneToOneField('OfficeVolunteer', null=True, on_delete=models.CASCADE)
+    carer = models.OneToOneField('Carer', null=True, on_delete=models.CASCADE)
+    branch_c = models.OneToOneField('BranchCoordinator', null=True, on_delete=models.CASCADE)
+
+    def __unicode__(self):
+        return self.username
+
+
+class UserTypeTemp(User):
     b_office = models.BooleanField()
     b_carer = models.BooleanField()
     b_branch_c = models.BooleanField()
@@ -91,9 +104,8 @@ class BranchCoordinator(models.Model):
     vaccinations = models.CharField(max_length=128, blank=True)
 
 
-'''class Branch(models.Model):
-    street_num_name = models.CharField(max_length=256, blank=False, null=True)
-    suburb = models.CharField(max_length=64, blank=False, null=True)
-    postcode = AUPostCodeField(max_length=8, blank=False, null=True)
-    phone_number = AUPhoneNumberField(blank=False, null=True)'''
-
+class RegisterUser(models.Model):
+    used = models.BooleanField(default=False)
+    b_office = models.BooleanField(default=False)
+    b_carer = models.BooleanField(default=False)
+    b_branch_c = models.BooleanField(default=False)

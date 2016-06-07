@@ -1,11 +1,12 @@
-from django.core.files import File
+from django.core.signing import Signer
 from django.db.models import Q
 from django.shortcuts import render
 from django.http import HttpResponseRedirect, HttpResponse
 from django.utils.datetime_safe import date
 
-from .models import UserType, Animal, OfficeVolunteer, Carer, BranchCoordinator
-from .forms import UserForm, AnimalForm, AnimalFormCarer, BranchCForm, CarerForm, OfficeForm
+from .models import UserType, Animal, OfficeVolunteer, Carer, BranchCoordinator, RegisterUser, UserTypeTemp
+from .forms import UserForm, AnimalForm, AnimalFormCarer, BranchCForm, CarerForm, OfficeForm, IDForm, NewUserForm, \
+    UserFormTemp
 from django.contrib.auth import logout, authenticate, login
 
 
@@ -36,8 +37,8 @@ def login_user(request):
     display_dict['disabled'] = disabled
     if request.user is not None:
         if request.user.is_active:
-            if UserType.objects.filter(pk=request.user).exists():
-                display_dict['user_type'] = UserType.objects.get(pk=request.user)
+            if UserTypeTemp.objects.filter(pk=request.user).count() > 0:
+                display_dict['user_type'] = UserTypeTemp.objects.get(pk=request.user)
     return render(request, 'index.html', display_dict)
 
 
@@ -52,7 +53,7 @@ def add_animal(request):
         if form.is_valid():
             new_animal = form.save(commit=False)
             new_animal.office_volunteer = OfficeVolunteer.objects.get(
-                pk=UserType.objects.get(pk=request.user).office.pk)
+                pk=UserTypeTemp.objects.get(pk=request.user).office.pk)
             if 'picture' in request.FILES:
                 new_animal.picture = request.FILES['picture']
             new_animal.save()
@@ -178,21 +179,78 @@ def add_carer(request):
     return render(request, 'user_form.html', {'comment_form': form})
 
 
+def get_reg_id(request):
+    if request.method == 'POST':
+        form = NewUserForm(request.POST)
+        if form.is_valid():
+            # signer = Signer('secret code!')
+            reg_user = form.save()
+            # request.session['enc_id'] = signer.sign(reg_user.pk)
+            request.session['enc_id'] = reg_user.pk
+            return HttpResponseRedirect('/display_id/')
+    else:
+        form = NewUserForm()
+
+    return render(request, 'create_new_user.html', {'form': form})
+
+
+def display_id(request):
+    if request.session['enc_id']:
+        enc_id = request.session.get('enc_id')
+        return render(request, 'display_reg_id.html', {'enc_id': enc_id})
+    return HttpResponseRedirect('/')
+
+
+def check_reg_id(request):
+    if request.method == 'POST':
+        id_form = IDForm(request.POST)
+        # signer = Signer('secret code!')
+        if id_form.is_valid():
+            register_id = id_form.cleaned_data['register_id']
+            # if RegisterUser.objects.filter(pk=signer.unsign(register_id)):
+            if RegisterUser.objects.filter(pk=register_id).count() > 0:
+                reg_user = RegisterUser.objects.get(pk=register_id)
+                if reg_user.used:
+                    return HttpResponse('This code has been used, please contact the administrator for a new one.')
+                else:
+                    reg_user.used = True
+                    reg_user.save()
+                    request.session['reg_id'] = register_id
+                    return HttpResponseRedirect('/add_user/')
+    else:
+        id_form = IDForm()
+
+    return render(request, 'check_reg_id.html', {'id_form': id_form})
+
+
 def register(request):
+    # signer = Signer('secret code!')
+    if 'reg_id' not in request.session:
+        return HttpResponse('Please go back and enter a valid registration ID.')
+
+    # if not RegisterUser.objects.filter(pk=signer.unsign(request.session['reg_id'])):
+    if not RegisterUser.objects.filter(pk=request.session['reg_id']).count() > 0:
+        return HttpResponse('Please go back and enter a valid registration ID.')
+
+    reg_user = RegisterUser.objects.get(pk=request.session['reg_id'])
+
     # If it's a HTTP POST, we're interested in processing form data.
     if request.method == 'POST':
         # Attempt to grab information from the raw form information.
         # Note that we make use of both UserForm and UserProfileForm.
-        user_form = UserForm(request.POST)
+        user_form = UserFormTemp(request.POST)
 
         # If the two forms are valid...
         if user_form.is_valid():
             # Save the user's form data to the database.
-            user = user_form.save()
+            user = user_form.save(commit=False)
 
             # Now we hash the password with the set_password method.
             # Once hashed, we can update the user object.
             user.set_password(user.password)
+            user.b_office = reg_user.b_office
+            user.b_carer = reg_user.b_carer
+            user.b_branch_c = reg_user.b_branch_c
             user.save()
             request.session['reg_user_id'] = user.pk
             # Update our variable to tell the template registration was successful.
@@ -207,20 +265,21 @@ def register(request):
     # Not a HTTP POST, so we render our form using two ModelForm instances.
     # These forms will be blank, ready for user input.
     else:
-        user_form = UserForm()
+        user_form = UserFormTemp()
 
     # Render the template depending on the context.
-    return render(request, 'user_form.html', {'user_form': user_form})
+    return render(request, 'user_form.html', {'user_form': user_form, 'reg_user': reg_user})
 
 
 def reg_user_type(request):
     registered = False
-    reg_user = UserType.objects.get(pk=request.session.get('reg_user_id'))
+    # TODO will give error if page accessed incorrectly
+    reg_user = UserTypeTemp.objects.get(pk=request.session.get('reg_user_id'))
 
     display_dict = {}
 
     if request.method == 'POST':
-        # TODO Has the potential to make too many copies of branch manager and office volunteers if a field isn't valid
+
         valid = True
         if reg_user.b_carer:
             carer_form = CarerForm(request.POST)
@@ -268,7 +327,7 @@ def reg_user_type(request):
 
 
 def table(request):
-    query = UserType.objects.all()
+    query = UserTypeTemp.objects.all()
     return render(request, 'table.html', {'query': query})
 
 
@@ -279,8 +338,9 @@ def animal_table(request):
 
 def branch_animal_table(request):
     display_dict = {}
-    if UserType.objects.filter(pk=request.user).exists:
-        display_dict['query'] = Animal.objects.filter(branch_coordinator=UserType.objects.get(pk=request.user).branch_c)
+    if UserTypeTemp.objects.filter(pk=request.user).count() > 0:
+        display_dict['query'] = Animal.objects.filter(
+            branch_coordinator=UserTypeTemp.objects.get(pk=request.user).branch_c)
     return render(request, 'animal_table.html', display_dict)
 
 
@@ -291,8 +351,8 @@ def office_animal_table(request):
 
 def carer_animal_table(request):
     display_dict = {}
-    if Carer.objects.filter(pk=request.user.pk).exists:
-        query = Animal.objects.filter(carer=UserType.objects.get(pk=request.user).carer)
+    if Carer.objects.filter(pk=request.user.pk).count() > 0:
+        query = Animal.objects.filter(carer=UserTypeTemp.objects.get(pk=request.user).carer)
         query.filter(Q(status__isnull=True, picked_up=False) | Q(status=1, picked_up=True))
         display_dict['query'] = query
     return render(request, 'animal_table.html', display_dict)
@@ -306,8 +366,8 @@ def view_animal(request, animal_id):
 def carer_edit_animal(request, animal_id):
     display_dict = {}
     # TODO Change to check if u have permission to view the animal too
-    if UserType.objects.filter(pk=request.user.pk).exists:
-        animal = Animal.objects.get(carer=UserType.objects.get(pk=request.user).carer, status=1, pk=animal_id)
+    if UserTypeTemp.objects.filter(pk=request.user.pk).count() > 0:
+        animal = Animal.objects.get(carer=UserTypeTemp.objects.get(pk=request.user).carer, status=1, pk=animal_id)
 
         if request.method == 'POST':
             animal_form = AnimalFormCarer(request.POST, request.FILES, instance=animal)

@@ -21,6 +21,12 @@
                         </div>
                     </div>
                 {% endfor %}
+                {% if reg_user.b_branch_c %}
+                    <tr>Creating Branch Coordinator</tr>{% endif %}
+                {% if reg_user.b_office %}
+                    <tr>Creating Office Volunteer</tr>{% endif %}
+                {% if reg_user.b_carer %}
+                    <tr>Creating Carer</tr>{% endif %}
             </table>
             <div align="left">
                 <button class="btn btn-primary" type="submit">submit</button>

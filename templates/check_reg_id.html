@@ -1,0 +1,12 @@
+{% extends "base1.html" %}
+
+{% block content %}
+    <h2 class="text-center">New User</h2>
+    <form method="post" enctype="multipart/form-data">
+        <table>
+            {% csrf_token %}
+            {{ id_form.as_table }}
+        </table>
+        <button class="btn btn-primary" type="submit">submit</button>
+    </form>
+{% endblock %}

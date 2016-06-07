@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import ModelForm
-from .models import UserType, Animal, Carer, BranchCoordinator, OfficeVolunteer
+from .models import UserType, Animal, Carer, BranchCoordinator, OfficeVolunteer, UserTypeTemp, RegisterUser
 
 
 class UserForm(ModelForm):
@@ -8,9 +8,16 @@ class UserForm(ModelForm):
 
     class Meta:
         model = UserType
-        fields = ['username', 'email', 'password', 'first_name', 'last_name', 'street_num_name', 'suburb', 'postcode',
-                  'phone_number', 'b_branch_c',
-                  'b_office', 'b_carer']
+        fields = ['username', 'email', 'password', 'first_name', 'last_name', 'address', 'suburb', 'postcode',
+                  'phone_number']
+
+
+class UserFormTemp(ModelForm):
+    password = forms.CharField(widget=forms.PasswordInput())
+
+    class Meta:
+        model = UserTypeTemp
+        fields = ['username', 'email', 'password', 'first_name', 'last_name']
 
 
 class BranchCForm(ModelForm):
@@ -41,3 +48,13 @@ class AnimalFormCarer(ModelForm):
     class Meta:
         model = Animal
         exclude = ['status', 'carer', 'office_volunteer', 'branch_coordinator', 'assessed', 'picked_up']
+
+
+class IDForm(forms.Form):
+    register_id = forms.CharField()
+
+
+class NewUserForm(ModelForm):
+    class Meta:
+        model = RegisterUser
+        fields = ['b_branch_c', 'b_office', 'b_carer']
