@@ -341,7 +341,7 @@ def branch_animal_table(request):
     if UserTypeTemp.objects.filter(pk=request.user).count() > 0:
         display_dict['query'] = Animal.objects.filter(
             branch_coordinator=UserTypeTemp.objects.get(pk=request.user).branch_c)
-    return render(request, 'animal_table.html', display_dict)
+    return render(request, 'branch_animal_table_old.html', display_dict)
 
 
 def office_animal_table(request):
@@ -361,6 +361,15 @@ def carer_animal_table(request):
 def view_animal(request, animal_id):
     animal = Animal.objects.get(pk=animal_id)
     return render(request, 'view_animal.html', {'item': animal})
+
+
+def view_animal_branch(request, animal_id):
+    animal = Animal.objects.get(pk=animal_id)
+    if request.method == 'POST':
+        if 'assess' in request.session:
+            animal.assessed = True
+            del request.session['assess']
+    return render(request, 'view_animal_branch.html', {'item': animal})
 
 
 def carer_edit_animal(request, animal_id):

@@ -39,9 +39,14 @@ class OfficeForm(ModelForm):
 
 
 class AnimalForm(ModelForm):
+    # carer = forms.ModelChoiceField(queryset='carer', to_field_name='id')
+    # branch_coordinator = forms.ModelChoiceField(queryset='branch_coordinator', to_field_name='id')
+    encounter_date = forms.DateField(input_formats=['%d/%m/%Y', '%d/%m/%y'])
+
     class Meta:
         model = Animal
-        fields = '__all__'
+        fields = ['species', 'caller_address', 'caller_name', 'caller_number', 'suburb', 'postcode', 'encounter_date',
+                  'encounter_location', 'injury_description', 'age', 'carer', 'branch_coordinator']
 
 
 class AnimalFormCarer(ModelForm):

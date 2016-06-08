@@ -3,23 +3,71 @@
     <h2 class="text-left">Animal Form</h2>
     <div class="container">
         <form method="post" enctype="multipart/form-data">
-            <table>
-                {% for field in comment_form %}
+            {% csrf_token %}
+
                     <div class="col-md-offset-5">
                         <div class="form-group" align="left">
-        {% csrf_token %}
+
                             <div class="form-group">
+                                <h3>Caller Details</h3>
+                                <table>
                                 <tr>
-                                    <td>{{ field.label_tag }}</td>
-                                    <td>{{ field }}</td>
-                                    <td>{{ field.errors }}</td>
+                                    <td>Caller's name:</td>
+                                    <td>{{ comment_form.caller_name }}*</td>
                                 </tr>
+                                    <tr>
+                                        <td>Phone:</td>
+                                        <td>{{ comment_form.caller_number }}*</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Address:</td>
+                                        <td>{{ comment_form.caller_address }}*</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Suburb:</td>
+                                        <td>{{ comment_form.suburb }}*</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Postcode:</td>
+                                        <td>{{ comment_form.postcode }}</td>
+                                    </tr>
+                                </table>
+                                <h3>Animal Details</h3>
+                                <table>
+                                    <tr>
+                                        <td>Encounter Location:</td>
+                                        <td>{{ comment_form.encounter_location }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Encounter Date:</td>
+                                        <td>{{ comment_form.encounter_date }}* (dd/mm/yy)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Assumed species:</td>
+                                        <td>{{ comment_form.species }}*</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Age group:</td>
+                                        <td>{{ comment_form.age }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Brief description of injury/circumstances:</td>
+                                        <td>{{ comment_form.injury_description }} </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Assigned Branch Coordinator:</td>
+                                        <td>{{ comment_form.branch_coordinator }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Assigned Carer:</td>
+                                        <td>{{ comment_form.carer }} </td>
+                                    </tr>
+                                </table>
                             </div>
 
                         </div>
                     </div>
-                {% endfor %}
-    </table>
+
             <div align="left">
                 <button class="btn btn-primary" type="submit">submit</button>
             </div>

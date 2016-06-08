@@ -18,6 +18,7 @@ urlpatterns = [
     # url(r'^submitted/$', views.submitted, name='submitted'),  # etc.
     # url(r'^table/$', views.table, name='table'),
     url(r'^view_animal/(?P<animal_id>\d+)$', views.view_animal, name='view_animal'),
+    url(r'^view_animal_branch/(?P<animal_id>\d+)$', views.view_animal_branch, name='view_animal_branch'),
     url(r'^branch_animal_table/$', views.branch_animal_table, name='branch_animal_table'),
     url(r'^office_animal_table/$', views.animal_table, name='office_animal_table'),
     url(r'^report/$', views.office_animal_table, name='report'),

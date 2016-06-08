@@ -1,12 +1,23 @@
 {% extends "base1.html" %}
 
 {% block content %}
-    <h2 class="text-center">New User</h2>
+    <h2 class="text-center">Creating New User</h2>
     <form method="post" enctype="multipart/form-data">
         <table>
             {% csrf_token %}
-            {{ form.as_table }}
+            <tr>
+                <td>Branch Coordinator:</td>
+                <td>{{ form.b_branch_c }}</td>
+            </tr>
+            <tr>
+                <td>Office Volunteer:</td>
+                <td>{{ form.b_office }}</td>
+            </tr>
+            <tr>
+                <td>Carer:</td>
+                <td>{{ form.b_carer }}</td>
+            </tr>
         </table>
-        <button class="btn btn-primary" type="submit">submit</button>
+        <button class="btn btn-primary" type="submit">Submit</button>
     </form>
 {% endblock %}
