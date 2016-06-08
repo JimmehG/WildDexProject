@@ -341,7 +341,7 @@ def branch_animal_table(request):
     if UserTypeTemp.objects.filter(pk=request.user).count() > 0:
         display_dict['query'] = Animal.objects.filter(
             branch_coordinator=UserTypeTemp.objects.get(pk=request.user).branch_c)
-    return render(request, 'branch_animal_table_old.html', display_dict)
+    return render(request, 'branch_animal_table.html', display_dict)
 
 
 def office_animal_table(request):
