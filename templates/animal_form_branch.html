@@ -46,7 +46,7 @@
                                 <td>{{ comment_form.encounter_date }}* (dd/mm/yy)</td>
                             </tr>
                             <tr>
-                                <td>Species:</td>
+                                <td>Assumed species:</td>
                                 <td>{{ comment_form.species }}*</td>
                             </tr>
                             <tr>
@@ -54,30 +54,22 @@
                                 <td>{{ comment_form.age }}</td>
                             </tr>
                             <tr>
-                                <td>Weight:</td>
-                                <td>{{ comment_form.weight }}</td>
+                                <td>Brief description of injury/circumstances:</td>
+                                <td>{{ comment_form.injury_description }} </td>
                             </tr>
                             <tr>
-                                <td>Picture:</td>
-                                <td>{{ comment_form.picture }}</td>
+                                <td>Assigned Branch Coordinator:</td>
+                                <td>{{ comment_form.branch_coordinator }}</td>
                             </tr>
                             <tr>
-                                <td>Carer Comments:</td>
-                                <td>{{ comment_form.status_detail }}</td>
-                            </tr>
-                            <tr>
-                                <td>Injury:</td>
-                                <td>{{ comment_form.injury }}</td>
-                            </tr>
-                            <tr>
-                                <td>Cause of Injury:</td>
-                                <td>{{ comment_form.cause_of_injury }}</td>
+                                <td>Assigned Carer:</td>
+                                <td>{{ comment_form.carer }} </td>
                             </tr>
                         </table>
                     </div>
 
                 </div>
-                    </div>
+            </div>
 
             <div align="left">
                 <button class="btn btn-primary" type="submit">submit</button>

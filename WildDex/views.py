@@ -91,7 +91,7 @@ def branch_edit_animal(request, animal_id):
             return HttpResponseRedirect('/branch_animal_table/')
     else:
         form = AnimalForm(instance=animal)
-    return render(request, 'animal_form.html', {'comment_form': form})
+    return render(request, 'animal_form_branch.html', {'comment_form': form})
 
 
 def pick_up(request, animal_id):
@@ -366,9 +366,8 @@ def view_animal(request, animal_id):
 def view_animal_branch(request, animal_id):
     animal = Animal.objects.get(pk=animal_id)
     if request.method == 'POST':
-        if 'assess' in request.session:
+        if 'assess' in request.POST:
             animal.assessed = True
-            del request.session['assess']
     return render(request, 'view_animal_branch.html', {'item': animal})
 
 

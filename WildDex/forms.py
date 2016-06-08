@@ -50,9 +50,15 @@ class AnimalForm(ModelForm):
 
 
 class AnimalFormCarer(ModelForm):
+    # carer = forms.ModelChoiceField(queryset='carer', to_field_name='id')
+    # branch_coordinator = forms.ModelChoiceField(queryset='branch_coordinator', to_field_name='id')
+    encounter_date = forms.DateField(input_formats=['%d/%m/%Y', '%d/%m/%y'])
+
     class Meta:
         model = Animal
-        exclude = ['status', 'carer', 'office_volunteer', 'branch_coordinator', 'assessed', 'picked_up']
+        fields = ['species', 'caller_address', 'caller_name', 'caller_number', 'suburb', 'postcode', 'encounter_date',
+                  'encounter_location', 'age', 'weight', 'carer', 'branch_coordinator', 'picture', 'status_detail',
+                  'injury', 'cause_of_injury']
 
 
 class IDForm(forms.Form):

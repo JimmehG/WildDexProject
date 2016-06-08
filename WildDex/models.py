@@ -110,7 +110,7 @@ class UserType(User):
     carer = models.OneToOneField('Carer', null=True, on_delete=models.CASCADE)
     branch_c = models.OneToOneField('BranchCoordinator', null=True, on_delete=models.CASCADE)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.username
 
 
@@ -122,12 +122,16 @@ class UserTypeTemp(User):
     carer = models.OneToOneField('Carer', null=True, on_delete=models.CASCADE)
     branch_c = models.OneToOneField('BranchCoordinator', null=True, on_delete=models.CASCADE)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.username
 
 
 class OfficeVolunteer(models.Model):
     office_number = AUPhoneNumberField(blank=False, null=True)
+
+    def __str__(self):
+        return u'{0} {1} ({2})'.format(self.usertypetemp.first_name,
+                                       self.usertypetemp.last_name, self.usertypetemp.username)
 
 
 class Carer(models.Model):
@@ -136,12 +140,20 @@ class Carer(models.Model):
     facilities = models.CharField(max_length=128, blank=True)
     vaccinations = models.CharField(max_length=128, blank=True)
 
+    def __str__(self):
+        return u'{0} {1} ({2})'.format(self.usertypetemp.first_name,
+                                       self.usertypetemp.last_name, self.usertypetemp.username)
+
 
 class BranchCoordinator(models.Model):
     branch = models.CharField(max_length=128, blank=True)
     specialty = models.CharField(max_length=128, blank=True)
     facilities = models.CharField(max_length=128, blank=True)
     vaccinations = models.CharField(max_length=128, blank=True)
+
+    def __str__(self):
+        return u'{0} {1} ({2})'.format(self.usertypetemp.first_name,
+                                       self.usertypetemp.last_name, self.usertypetemp.username)
 
 
 class RegisterUser(models.Model):

@@ -2,7 +2,7 @@
 {% block content %}
     <head>
         <meta charset="UTF-8">
-        <title>Title</title>
+        <title>Animal Profile</title>
     </head>
     <body>
     <p>{% if item.picture %}<img src="{{ item.picture.url }}" width="64"/>{% endif %} {{ item.species }}{{ item.pk }}
@@ -20,6 +20,10 @@
         <tr>
             <td>Gender:</td>
             <td>{{ item.get_gender_display }}</td>
+        </tr>
+        <tr>
+            <td>Weight:</td>
+            <td>{{ item.weight }}</td>
         </tr>
         <tr>
             <td>Encounter date:</td>
@@ -47,7 +51,7 @@
         </tr>
         <tr>
             <td>Caller Address:</td>
-            <td>{{ item.street_num_name }} {{ item.suburb }} {{ item.postcode }}</td>
+            <td>{{ item.caller_address }} {{ item.suburb }} {{ item.postcode }}</td>
         </tr>
         <tr>
             <td>
@@ -58,17 +62,19 @@
                 {% endif %}
             </td>
         </tr>
-        <tr>
+        <!--<tr>
             <td><a href="/branch_edit_animal/{{ item.pk }}">Add/Edit Details</a></td>
-        </tr>
+        </tr>-->
         {% if not item.assessed %}
             <tr>
-                <form method="post" enctype="multipart/form-data">
+                <td>
+                    <form method="post">
                     {% csrf_token %}
                     <div align="left">
                         <button class="btn btn-primary" type="submit" name="assess">Assess animal</button>
                     </div>
                 </form>
+                </td>
             </tr>
         {% endif %}
     </table>
