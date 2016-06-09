@@ -1,0 +1,77 @@
+{% extends "base1.html" %}
+{% block content %}
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+    </head>
+    <body>
+    <p>{% if item.picture %}<img src="{{ item.picture.url }}" width="64"/>{% endif %} {{ item.species }}{{ item.pk }}
+    </p>
+
+    <table class="table table-condensed">
+        <tr>
+            <td>Species:</td>
+            <td>{{ item.get_species_display }}</td>
+        </tr>
+        <tr>
+            <td>Age:</td>
+            <td>{{ item.get_age_display }}</td>
+        </tr>
+        <tr>
+            <td>Gender:</td>
+            <td>{{ item.get_gender_display }}</td>
+        </tr>
+        <tr>
+            <td>Weight:</td>
+            <td>{{ item.weight }}</td>
+        </tr>
+        <tr>
+            <td>Encounter date:</td>
+            <td>{{ item.encounter_date }}</td>
+        </tr>
+        <tr>
+            <td>Encounter Location:</td>
+            <td>{{ item.encounter_location }}</td>
+        </tr>
+        <tr>
+            <td>Injury:</td>
+            <td>{{ item.get_injury_display }}</td>
+        </tr>
+        <tr>
+            <td>Cause of Injury:</td>
+            <td>{{ item.cause_of_injury }}</td>
+        </tr>
+        <tr>
+            <td>Brief description of injury/circumstances:</td>
+            <td>{{ item.injury_description }}</td>
+        </tr>
+        <tr>
+            <td>Caller Name:</td>
+            <td>{{ item.caller_name }} </td>
+        </tr>
+        <tr>
+            <td>Caller Contact #:</td>
+            <td>{{ item.caller_number }} </td>
+        </tr>
+        <tr>
+            <td>Caller Address:</td>
+            <td>{{ item.caller_address }} {{ item.suburb }} {{ item.postcode }}</td>
+        </tr>
+        <tr>
+            <td>
+                {% if item.assessed %}
+                    Assessed by coordinator
+                {% else %}
+                    Not yet assessed by coordinator
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <td>{% if item.picked_up %}<a href="/carer_edit_animal/{{ item.pk }}">Add/Edit Details</a>{% else %}
+                <a href="/pick_up/{{ item.pk }}">Pick Up Animal</a>{% endif %}</td>
+        </tr>
+    </table>
+
+    <p><a href="/">Home</a></p>
+    </body>
+{% endblock %}

@@ -351,7 +351,7 @@ def office_animal_table(request):
 
 def carer_animal_table(request):
     display_dict = {}
-    if Carer.objects.filter(pk=request.user.pk).count() > 0:
+    if UserTypeTemp.objects.filter(pk=request.user.pk).count() > 0:
         query = Animal.objects.filter(carer=UserTypeTemp.objects.get(pk=request.user).carer)
         query.filter(Q(status__isnull=True, picked_up=False) | Q(status=1, picked_up=True))
         display_dict['query'] = query
@@ -376,7 +376,6 @@ def carer_edit_animal(request, animal_id):
     # TODO Change to check if u have permission to view the animal too
     if UserTypeTemp.objects.filter(pk=request.user.pk).count() > 0:
         animal = Animal.objects.get(carer=UserTypeTemp.objects.get(pk=request.user).carer, status=1, pk=animal_id)
-
         if request.method == 'POST':
             animal_form = AnimalFormCarer(request.POST, request.FILES, instance=animal)
             if animal_form.is_valid():
@@ -384,10 +383,11 @@ def carer_edit_animal(request, animal_id):
                 if 'picture' in request.FILES:
                     temp_animal.picture = request.FILES['picture']
                 temp_animal.save()
-            return HttpResponseRedirect('/carer_animal_table/')
-        else:
-            animal_form = AnimalFormCarer(instance=animal)
-            display_dict['comment_form'] = animal_form
+                return HttpResponseRedirect('/carer_animal_table/')
+            else:
+                print(animal_form.errors)
+        animal_form = AnimalFormCarer(instance=animal)
+        display_dict['comment_form'] = animal_form
     else:
         return HttpResponse('You ain\'t got permission buddy <p><a href="/">Home</a></p>')
     return render(request, 'carer_edit_animal.html', display_dict)

@@ -2,6 +2,7 @@
 {% block content %}
     <h2 class="text-left">Animal Form</h2>
     <div class="container">
+        {{ comment_form.errors }}
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
 
@@ -9,7 +10,6 @@
                 <div class="form-group" align="left">
 
                     <div class="form-group">
-
                         <table>
                             <tr>
                                 <td><h4>Caller Details</h4></td>

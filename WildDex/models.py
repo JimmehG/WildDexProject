@@ -49,7 +49,7 @@ class Animal(models.Model):
         (14, 'Separated from Parents'),
         (15, 'Undernourished/Exhausted'),
     )
-    injury = models.CharField(max_length=2, blank=True, choices=INJURY_CHOICES)
+    injury = models.IntegerField(blank=True, choices=INJURY_CHOICES)
     CAUSE_CHOICES = (
         (0, 'Cat Attack'),
         (1, 'Dog Attack'),
@@ -71,7 +71,7 @@ class Animal(models.Model):
         (17, 'Weather(Beach Washed,ETC)'),
         (18, 'Unknown'),
     )
-    cause_of_injury = models.CharField(max_length=2, blank=True, choices=CAUSE_CHOICES)
+    cause_of_injury = models.IntegerField(blank=True, choices=CAUSE_CHOICES)
     STATUS_CHOICES = (
         (0, 'Humanely euthanased'),
         (1, 'In Care'),
