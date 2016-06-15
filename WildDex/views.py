@@ -363,11 +363,17 @@ def view_animal(request, animal_id):
     return render(request, 'view_animal.html', {'item': animal})
 
 
+def view_animal_office(request, animal_id):
+    animal = Animal.objects.get(pk=animal_id)
+    return render(request, 'view_animal_office.html', {'item': animal})
+
+
 def view_animal_branch(request, animal_id):
     animal = Animal.objects.get(pk=animal_id)
     if request.method == 'POST':
         if 'assess' in request.POST:
             animal.assessed = True
+            animal.save()
     return render(request, 'view_animal_branch.html', {'item': animal})
 
 

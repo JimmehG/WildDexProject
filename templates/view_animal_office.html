@@ -39,7 +39,7 @@
         </tr>
         <tr>
             <td>Cause of Injury:</td>
-            <td>{{ item.cause_of_injury }}</td>
+            <td>{{ item.get_cause_of_injury_display }}</td>
         </tr>
         <tr>
             <td>Brief description of injury/circumstances:</td>
@@ -67,8 +67,7 @@
             </td>
         </tr>
         <tr>
-            <td>{% if item.picked_up %}<a href="/carer_edit_animal/{{ item.pk }}">Add/Edit Details</a>{% else %}
-                <a href="/pick_up/{{ item.pk }}">Pick Up Animal</a>{% endif %}</td>
+            <td><a href="/office_edit_animal/{{ item.pk }}">Add/Edit Details</a></td>
         </tr>
     </table>
 

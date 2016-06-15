@@ -49,7 +49,7 @@ class Animal(models.Model):
         (14, 'Separated from Parents'),
         (15, 'Undernourished/Exhausted'),
     )
-    injury = models.IntegerField(blank=True, choices=INJURY_CHOICES)
+    injury = models.IntegerField(null=True, blank=True, choices=INJURY_CHOICES)
     CAUSE_CHOICES = (
         (0, 'Cat Attack'),
         (1, 'Dog Attack'),
@@ -71,7 +71,7 @@ class Animal(models.Model):
         (17, 'Weather(Beach Washed,ETC)'),
         (18, 'Unknown'),
     )
-    cause_of_injury = models.IntegerField(blank=True, choices=CAUSE_CHOICES)
+    cause_of_injury = models.IntegerField(null=True, blank=True, choices=CAUSE_CHOICES)
     STATUS_CHOICES = (
         (0, 'Humanely euthanased'),
         (1, 'In Care'),
@@ -141,8 +141,11 @@ class Carer(models.Model):
     vaccinations = models.CharField(max_length=128, blank=True)
 
     def __str__(self):
-        return u'{0} {1} ({2})'.format(self.usertypetemp.first_name,
-                                       self.usertypetemp.last_name, self.usertypetemp.username)
+        try:
+            return u'{0} {1} ({2})'.format(self.usertypetemp.first_name,
+                                           self.usertypetemp.last_name, self.usertypetemp.username)
+        except Exception:
+            return 'nousertype'
 
 
 class BranchCoordinator(models.Model):

@@ -1,6 +1,6 @@
 {% extends "base1.html" %}
 {% block content %}
-    <h2 class="text-left">Animal Form</h2>
+    <h2 class="text-center">Animal Form</h2>
     <div class="container">
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
@@ -8,9 +8,10 @@
                     <div class="col-md-offset-5">
                         <div class="form-group" align="left">
 
-                            <div class="form-group">
+
 
                                 <table>
+                                    <div class="form-group" align="left">
                                     <tr>
                                         <td><h4>Caller Details</h4></td>
                                     </tr>
@@ -65,18 +66,19 @@
                                         <td>Assigned Carer:</td>
                                         <td>{{ comment_form.carer }} </td>
                                     </tr>
+                                    </div>
                                 </table>
-                            </div>
+
 
                         </div>
                     </div>
 
-            <div align="left">
+            <div align="center">
                 <button class="btn btn-primary" type="submit">submit</button>
             </div>
         </form>
 
 
-        <p class="text-left"><a href="/">Home</a></p>
+        <p class="text-center"><a href="/">Home</a></p>
     </div>
 {% endblock %}
