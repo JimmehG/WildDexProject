@@ -381,19 +381,20 @@ def carer_edit_animal(request, animal_id):
     display_dict = {}
     # TODO Change to check if u have permission to view the animal too
     if UserTypeTemp.objects.filter(pk=request.user.pk).count() > 0:
-        animal = Animal.objects.get(carer=UserTypeTemp.objects.get(pk=request.user).carer, status=1, pk=animal_id)
-        if request.method == 'POST':
-            animal_form = AnimalFormCarer(request.POST, request.FILES, instance=animal)
-            if animal_form.is_valid():
-                temp_animal = animal_form.save(commit=False)
-                if 'picture' in request.FILES:
-                    temp_animal.picture = request.FILES['picture']
-                temp_animal.save()
-                return HttpResponseRedirect('/carer_animal_table/')
-            else:
-                print(animal_form.errors)
-        animal_form = AnimalFormCarer(instance=animal)
-        display_dict['comment_form'] = animal_form
+        if Animal.objects.filter(carer=UserTypeTemp.objects.get(pk=request.user.pk).carer, pk=animal_id).count() > 0:
+            animal = Animal.objects.get(pk=animal_id)
+            if request.method == 'POST':
+                animal_form = AnimalFormCarer(request.POST, request.FILES, instance=animal)
+                if animal_form.is_valid():
+                    temp_animal = animal_form.save(commit=False)
+                    if 'picture' in request.FILES:
+                        temp_animal.picture = request.FILES['picture']
+                    temp_animal.save()
+                    return HttpResponseRedirect('/carer_animal_table/')
+                else:
+                    print(animal_form.errors)
+            animal_form = AnimalFormCarer(instance=animal)
+            display_dict['comment_form'] = animal_form
     else:
         return HttpResponse('You ain\'t got permission buddy <p><a href="/">Home</a></p>')
     return render(request, 'carer_edit_animal.html', display_dict)

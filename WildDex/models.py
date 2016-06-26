@@ -49,7 +49,7 @@ class Animal(models.Model):
         (14, 'Separated from Parents'),
         (15, 'Undernourished/Exhausted'),
     )
-    injury = models.IntegerField(null=True, blank=True, choices=INJURY_CHOICES)
+    injury = models.IntegerField(null=True, blank=True, default=None, choices=INJURY_CHOICES)
     CAUSE_CHOICES = (
         (0, 'Cat Attack'),
         (1, 'Dog Attack'),
@@ -71,14 +71,14 @@ class Animal(models.Model):
         (17, 'Weather(Beach Washed,ETC)'),
         (18, 'Unknown'),
     )
-    cause_of_injury = models.IntegerField(null=True, blank=True, choices=CAUSE_CHOICES)
+    cause_of_injury = models.IntegerField(null=True, blank=True, default=None, choices=CAUSE_CHOICES)
     STATUS_CHOICES = (
         (0, 'Humanely euthanased'),
         (1, 'In Care'),
         (2, 'Relocated'),
         (3, 'No action'),
     )
-    status = models.IntegerField(null=True, blank=True, choices=STATUS_CHOICES)
+    status = models.IntegerField(null=True, blank=True, default=None, choices=STATUS_CHOICES)
     status_detail = models.CharField(max_length=256, blank=True)
     status_date = models.DateField(blank=True, null=True)
     carer = models.ForeignKey('Carer', on_delete=models.SET_NULL, null=True, blank=True)
@@ -92,7 +92,7 @@ class Animal(models.Model):
         (1, 'Juvenile'),
         (2, 'Adult')
     )
-    age = models.IntegerField(choices=AGE_CHOICES, blank=True, null=True)
+    age = models.IntegerField(null=True, blank=True, default=None, choices=AGE_CHOICES)
     assessed = models.BooleanField(default=False)
     picked_up = models.BooleanField(default=False)
 
